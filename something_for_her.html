@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>this is for aries frfr</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Calibri', 'Candara', sans-serif;
+    background: #fafaf8;
+    color: #1a1a1a;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  #gradient-bg {
+    position: fixed; inset: 0; z-index: 0;
+    background: linear-gradient(135deg, #fdf6ff 0%, #f0f8ff 40%, #fff8f0 70%, #f5fff8 100%);
+    background-size: 400% 400%;
+    animation: gradMove 18s ease infinite;
+    opacity: 0;
+    transition: opacity 2s ease;
+  }
+  @keyframes gradMove {
+    0%   { background-position: 0%   50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0%   50%; }
+  }
+
+  #floaters { position: fixed; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; }
+  .floater {
+    position: absolute;
+    font-size: 12px;
+    opacity: 0;
+    animation: floatUp linear infinite;
+  }
+  @keyframes floatUp {
+    0%   { transform: translateY(100vh) rotate(0deg);   opacity: 0; }
+    10%  { opacity: 0.35; }
+    90%  { opacity: 0.2;  }
+    100% { transform: translateY(-60px) rotate(360deg); opacity: 0; }
+  }
+
+  #intro {
+    position: fixed; inset: 0; z-index: 100;
+    background: #fafaf8;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    transition: opacity 1.4s ease;
+  }
+  #intro h1 {
+    font-size: clamp(1.8rem, 5vw, 3rem);
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    color: #2a2a2a;
+    margin-bottom: 1rem;
+  }
+  #intro p {
+    font-size: 1rem;
+    color: #777;
+    line-height: 1.8;
+    margin-bottom: 2.5rem;
+  }
+  #intro p em { color: #aaa; font-size: 0.88rem; }
+  #enter-btn {
+    background-image: url('button.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    border: none;
+    padding: 0.7rem 2.2rem;
+    font-size: 0.95rem;
+    color: #555;
+    cursor: pointer;
+    letter-spacing: 0.1em;
+    border-radius: 0;
+    transition: all 0.3s ease;
+    font-family: inherit;
+  }
+  #enter-btn:hover { opacity: 0.8; color: #222; }
+
+  #main-site {
+    position: relative; z-index: 10;
+    opacity: 0; transition: opacity 1.5s ease;
+    min-height: 100vh;
+  }
+
+  nav {
+    display: flex; gap: 2.5rem; justify-content: center;
+    padding: 2rem 0 1rem;
+    font-size: 0.9rem; letter-spacing: 0.05em;
+  }
+  nav a {
+    text-decoration: underline; color: #555;
+    cursor: pointer; transition: color 0.2s;
+    background: none; border: none;
+    font-family: inherit; font-size: inherit;
+  }
+  nav a:hover { color: #111; }
+
+  section {
+    max-width: 680px; margin: 0 auto; padding: 5rem 2rem;
+    min-height: 80vh; display: none; flex-direction: column;
+    align-items: center; text-align: center;
+  }
+  section.active { display: flex; animation: fadeIn 0.7s ease forwards; }
+  section.fade-out { animation: fadeOut 0.35s ease forwards; }
+  @keyframes fadeIn  { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
+
+  h2 { font-size: 1.5rem; font-weight: 400; margin-bottom: 2.5rem; color: #222; }
+
+  .btn-row { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; margin-top: 1.5rem; }
+  .choice-btn {
+    padding: 0.85rem 2.5rem; font-size: 1.1rem;
+    border: none; border-radius: 0;
+    background-image: url('button.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    cursor: pointer; font-family: inherit;
+    color: #333; transition: all 0.25s ease; letter-spacing: 0.03em;
+    min-width: 110px;
+  }
+  /* --- choice btn tooltip --- */
+  .choice-btn { position: relative; }
+  .choice-btn::after {
+    content: attr(data-tip);
+    position: absolute; bottom: calc(100% + 8px); left: 50%;
+    transform: translateX(-50%);
+    background: rgba(30,30,30,0.82); color: #fff;
+    font-size: 0.75rem; letter-spacing: 0.04em;
+    padding: 0.35rem 0.9rem; border-radius: 20px;
+    white-space: nowrap; pointer-events: none;
+    opacity: 0; transition: opacity 0.2s ease;
+  }
+  .choice-btn:hover::after { opacity: 1; }
+
+  /* --- loading message --- */
+  #loading-msg {
+    position: fixed; inset: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: center;
+    pointer-events: none;
+  }
+  #loading-msg span {
+    font-size: 0.95rem; color: #aaa; letter-spacing: 0.06em;
+    font-style: italic;
+    opacity: 0; transition: opacity 0.6s ease;
+  }
+
+  /* --- pictures tab --- */
+  #pictures { gap: 2rem; }
+  #pictures h2 { margin-bottom: 0; }
+  .pics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 12px; width: 100%; margin-top: 1rem;
+  }
+  .pics-grid .pic-slot {
+    aspect-ratio: 1 / 1; border-radius: 12px;
+    overflow: hidden; background: #f0f0ee;
+    border: 0.5px solid #e0e0de;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .pics-grid .pic-slot img {
+    width: 100%; height: 100%; object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+  .pics-grid .pic-slot:hover img { transform: scale(1.04); }
+  .pics-note {
+    font-size: 0.8rem; color: #bbb; margin-top: 0.5rem;
+    letter-spacing: 0.04em;
+  }
+
+  .choice-btn:hover { opacity: 0.82; transform: translateY(-1px); }
+  .choice-btn:active { transform: scale(0.97); }
+
+  #response-area { margin-top: 2.5rem; animation: fadeIn 0.7s ease; display: none; width: 100%; }
+  #response-area.visible { display: block; }
+  #response-area h3 { font-size: 1.3rem; font-weight: 400; margin-bottom: 1.5rem; color: #222; }
+
+  .quest-list { list-style: none; text-align: left; width: 100%; max-width: 340px; }
+  .quest-list li {
+    padding: 0.8rem 0.2rem; font-size: 0.97rem; color: #444;
+    cursor: pointer; display: flex; align-items: flex-start; gap: 10px;
+    line-height: 1.5;
+  }
+  .quest-list li:last-child { border-bottom: none; }
+  .quest-list li .box {
+    width: 16px; height: 16px; border: 1.5px solid #ccc;
+    border-radius: 3px; flex-shrink: 0; margin-top: 2px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; color: #888; transition: all 0.2s;
+  }
+  .quest-list li.selected .box { border-color: #888; background: #888; color: #fff; }
+
+  .picker-section { margin-top: 2rem; text-align: center; }
+  .picker-section label { display: block; font-size: 0.9rem; color: #777; margin-bottom: 0.5rem; }
+  .picker-section input[type="date"],
+  .picker-section input[type="time"] {
+    padding: 0.6rem 1rem; border: none; border-radius: 0;
+    font-family: inherit; font-size: 0.9rem; color: #444;
+    background-image: url('button.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    outline: none; margin: 0.3rem;
+  }
+  .submit-btn {
+    margin-top: 1.5rem; padding: 0.7rem 2rem;
+    background: #222; color: #fff; border: none; border-radius: 30px;
+    font-family: inherit; font-size: 0.9rem; cursor: pointer;
+    letter-spacing: 0.08em; transition: all 0.25s ease;
+  }
+  .submit-btn:hover { background: #444; transform: translateY(-1px); }
+
+  #more-text { font-size: 0.9rem; color: #aaa; letter-spacing: 0.05em; margin-bottom: 3rem; }
+
+  #player-area {
+    opacity: 0; transition: opacity 1.2s ease;
+    margin-top: 1rem; width: 100%;
+  }
+  #player-area.visible { opacity: 1; }
+  .player-card {
+    border: 0.5px solid #ddd; border-radius: 16px;
+    padding: 1.5rem 2rem; background: rgba(255,255,255,0.6);
+    max-width: 380px; margin: 0 auto;
+  }
+  .player-card .label { font-size: 0.75rem; color: #bbb; letter-spacing: 0.1em; margin-bottom: 0.2rem; }
+  .player-card .song-name { font-size: 1.1rem; color: #333; margin-bottom: 1.2rem; }
+  .player-controls {
+    display: flex; align-items: center; gap: 1rem;
+    justify-content: center; margin-bottom: 1.2rem;
+  }
+  .ctrl-btn {
+    background: none; border: none; cursor: pointer;
+    font-size: 1.2rem; color: #666; padding: 0.3rem;
+    transition: color 0.2s;
+  }
+  .ctrl-btn:hover { color: #111; }
+  .play-btn {
+    width: 42px; height: 42px; border-radius: 50%;
+    border: 1.5px solid #ccc; display: flex;
+    align-items: center; justify-content: center;
+    font-size: 1rem; cursor: pointer; background: none;
+    transition: all 0.2s; color: #444;
+  }
+  .play-btn:hover { border-color: #888; background: rgba(0,0,0,0.04); }
+  .vol-row { display: flex; align-items: center; gap: 8px; font-size: 0.75rem; color: #bbb; }
+  .vol-row input[type="range"] { flex: 1; accent-color: #888; }
+
+  #compliment-bar {
+    position: fixed; bottom: 70px; left: 0; right: 0; z-index: 20;
+    text-align: center; padding: 0.6rem;
+    font-size: 0.82rem; color: #aaa; letter-spacing: 0.05em;
+    pointer-events: none;
+  }
+  #compliment-bar span { transition: opacity 0.8s ease; }
+
+  #bottom-player {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 30;
+    background: rgba(250,250,248,0.88);
+    backdrop-filter: blur(12px);
+    border-top: 0.5px solid #e8e8e8;
+    display: flex; align-items: center; justify-content: center;
+    gap: 1.4rem; padding: 0.6rem 1.5rem;
+    opacity: 0; transition: opacity 1s ease;
+  }
+  #bottom-player.visible { opacity: 1; }
+  #bottom-player .bp-song {
+    font-size: 0.8rem; color: #888; letter-spacing: 0.04em;
+    min-width: 130px; text-align: center;
+  }
+  #bottom-player .bp-song span { color: #444; font-size: 0.85rem; display: block; }
+  .bp-btn {
+    background: none; border: none; cursor: pointer;
+    font-size: 1rem; color: #888; padding: 0.2rem 0.4rem;
+    transition: color 0.2s;
+  }
+  .bp-btn:hover { color: #222; }
+  .bp-play {
+    width: 34px; height: 34px; border-radius: 50%;
+    border: 1.5px solid #ccc; display: flex;
+    align-items: center; justify-content: center;
+    font-size: 0.85rem; cursor: pointer; background: none;
+    transition: all 0.2s; color: #555;
+  }
+  .bp-play:hover { border-color: #888; }
+  .bp-vol { display: flex; align-items: center; gap: 6px; }
+  .bp-vol input[type="range"] { width: 70px; accent-color: #aaa; }
+
+  .success-msg { font-size: 1.1rem; color: #555; line-height: 2; }
+  .success-msg strong {
+    font-weight: 400; font-size: 1.4rem; color: #222;
+    display: block; margin-bottom: 0.5rem;
+  }
+</style>
+</head>
+<body>
+
+<div id="gradient-bg"></div>
+<div id="floaters"></div>
+
+<div id="intro">
+  <h1>To Airibella From Dee</h1>
+  <p>
+   Sooo, as you can tell, I made something for ya<br>
+    <em>(ANDDD my discord coding friend helped ALOTTTTT "maybe even TOOO much... he pretty much helped me with everything all saturday / sunday night... since i dont really code in html,java / css before",<br>so say thank you to them for me)</em>
+  </p>
+  <button id="enter-btn" onclick="enterSite()">You can Click Enter Now.. HURRY UP</button>
+</div>
+
+<div id="loading-msg"><span id="loading-text">loading it up frr... (i meant destroying ya trash self at totk(im kidding...)</span></div>
+
+<div id="main-site">
+  <nav>
+    <a onclick="showSection('dates')">hangouts / dates</a>
+    <a onclick="showSection('pictures')">pictures / things we did</a>
+    <a onclick="showSection('more')">more</a>
+  </nav>
+
+  <section id="dates">
+    <h2>Hey, question. Do you wanna go on a date / hangout with me? It's up to you :)</h2>
+    <div class="btn-row">
+      <button class="choice-btn" onclick="handleAnswer('yes')" data-tip="amazing choice...">YES!</button>
+      <button class="choice-btn" onclick="handleAnswer('maybe')" data-tip="okayy yessirr">Maybe</button>
+      <button class="choice-btn" onclick="handleAnswer('no')" data-tip="yeowch. please dont click that...">No</button>
+    </div>
+
+    <div id="response-area">
+
+      <div id="yes-response">
+        <h3>OH SHOOTTTT! Bettttt.</h3>
+        <p style="color:#888;font-size:.9rem;margin-bottom:1.5rem;">Choose a place for our date / hangout</p>
+
+        <ul class="quest-list" id="quest-list">
+          <li onclick="toggleQuest(this)">
+            <span class="box">✅</span>
+            <span>At the mall</span>
+               <span style="color:#bbb;font-size:.82rem">(Very Recommended!)</span>
+            <span>    
+          </li>
+          <li onclick="toggleQuest(this)">
+            <span class="box">✅</span>
+            <span>Movie Date</span>
+               <span style="color:#bbb;font-size:.82rem">(Very Recommended!)</span>
+            <span>            
+          </li>
+          <li onclick="toggleQuest(this)">
+            <span class="box">✅</span>
+            <span>Volleyball at hyde park<br>
+              <span style="color:#bbb;font-size:.82rem">(ik you dont play, but yeah)</span>
+            </span>
+          </li>
+          <li onclick="toggleQuest(this)">
+            <span class="box">✅</span>
+            <span>Walking around the niagara falls frrr / Riding bikes </span>
+               <span style="color:#bbb;font-size:.82rem">(itll be hard since i dont have a bike yet)</span>
+            <span>
+          </li>
+        </ul>
+
+        <div class="picker-section">
+          <p style="font-size:.9rem;color:#777;margin-bottom:1rem;">Pick a date and time.</p>
+          <div>
+            <label>Date</label>
+            <input type="date" id="pick-date">
+          </div>
+          <div style="margin-top:.5rem">
+            <label>Time</label>
+            <input type="time" id="pick-time">
+          </div>
+          <button class="submit-btn" onclick="submitQuest()">Take a screenshot btw</button>
+        </div>
+      </div>
+
+      <div id="no-response" style="display:none">
+        <p style="font-size:1.3rem;color:#888;">damn it... </p>
+        <p style="color:#aaa;margin-top:.7rem;">maybe another time we can... just let me know</p>
+      </div>
+
+      <div id="success-response" style="display:none" class="success-msg">
+        <strong>Thank you....</strong>
+        PLEASEEE again... Take a screenshot of it, and send it to me. I'll see you then hopefully :)
+        I'll add more things to this website as it goes on...
+      </div>
+
+    </div>
+  </section>
+
+  <section id="pictures">
+    <h2>some moments or whatever we did togetherr like roblox (took forever to find some.. and by some i meant three lmaooo)</h2>
+    <div class="pics-grid" id="pics-grid">
+      <div class="pic-slot"><img src="photo1.png" alt=""></div>
+      <div class="pic-slot"><img src="photo2.png" alt=""></div>
+      <div class="pic-slot"><img src="photo3.png" alt=""></div>
+    </div>
+    <p class="pics-note">more to come... maybe eventually... ya never knoww</p>
+  </section>
+
+  <section id="more">
+    <p id="more-text">this doesn't work rn atm... by "dosen't work" i meant that we didnt even code anything in for that yet lmaooo. and this is ONLY because i got lazy and tired. HOWEVER, Be on the lookout for a QUIZ section </p>
+  </section>
+
+</div>
+
+<div id="bottom-player">
+  <div class="bp-song">
+    now playing<span id="bp-song-name">Breathe Deeper</span>
+  </div>
+<button class="bp-btn" onclick="prevSong()"><img src="prev.png" style="width:24px;height:24px"></button>
+<button class="bp-play" id="bp-play-btn" onclick="togglePlay()"><img id="play-icon" src="play.png" style="width:24px;height:24px"></button>
+<button class="bp-btn" onclick="nextSong()"><img src="next.png" style="width:24px;height:24px"></button>
+  <div class="bp-vol">
+    <span style="font-size:.8rem;color:#bbb">&#128264;</span>
+    <input type="range" min="0" max="100" value="70" oninput="setVol(this.value)">
+  </div>
+</div>
+
+<div id="compliment-bar"><span id="compliment-text"></span></div>
+
+
+<script>
+
+const symbols = ['im the goat','please dont kill me','im glad i met ya','hopefully you said yes','airibella is NOT an alpha','seriously though, im really glad i met ya','you suck bunss at zelda totk','coding this was a pain in the ass','this was gonna be a flower, but im lazy','If you think I couldnt hold my own, believe me, I can','Believe me, I can, believe me, I can'];
+const floatContainer = document.getElementById('floaters');
+
+for (let i = 0; i < 22; i++) {
+  const el = document.createElement('div');
+  el.className = 'floater';
+  el.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+
+  el.style.left              = Math.random() * 100 + 'vw';
+  el.style.fontSize          = (12 + Math.random() * 13) + 'px';
+  el.style.animationDuration = (15 + Math.random() * 23) + 's';
+  el.style.animationDelay   = (Math.random() * 18) + 's';
+  el.style.color             = ['#d9b8ff','#b8d4ff','#ffb8d9','#b8ffd9','#ffe8b8'][Math.floor(Math.random() * 8)];
+  floatContainer.appendChild(el);
+}
+
+
+function enterSite() {
+  const intro = document.getElementById('intro');
+  const site  = document.getElementById('main-site');
+  const bg    = document.getElementById('gradient-bg');
+  const loadMsg = document.getElementById('loading-text');
+
+  intro.style.opacity = '0';
+
+  setTimeout(() => {
+    intro.style.display = 'none';
+
+    
+    loadMsg.style.opacity = '1';
+
+    setTimeout(() => {
+      loadMsg.style.opacity = '0';
+      setTimeout(() => {
+        bg.style.opacity    = '0.18';
+        site.style.opacity  = '1';
+        showSection('dates');
+        setTimeout(() => {
+          document.getElementById('bottom-player').classList.add('visible');
+        }, 600);
+      }, 700);
+    }, 3000);
+
+  }, 1400);
+}
+
+
+function showSection(id) {
+  const current = document.querySelector('section.active');
+  const next    = document.getElementById(id);
+
+  if (current && current !== next) {
+    current.classList.add('fade-out');
+    setTimeout(() => {
+      current.classList.remove('active', 'fade-out');
+      next.classList.add('active');
+    }, 350);
+  } else {
+    document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+    next.classList.add('active');
+  }
+
+  if (id === 'more') {
+
+  }
+}
+
+
+let selectedQuest = '';
+
+function toggleQuest(el) {
+  document.querySelectorAll('.quest-list li').forEach(li => li.classList.remove('selected'));
+  el.classList.add('selected');
+  // grab the second span, which is always the activity name
+  const spans = el.querySelectorAll('span');
+  selectedQuest = (spans[1] || spans[0]).textContent.trim();
+}
+
+function handleAnswer(ans) {
+  const ra  = document.getElementById('response-area');
+  const yes = document.getElementById('yes-response');
+  const no  = document.getElementById('no-response');
+  const suc = document.getElementById('success-response');
+
+  yes.style.display = 'none';
+  no.style.display  = 'none';
+  suc.style.display = 'none';
+  ra.classList.add('visible');
+
+  if (ans === 'yes' || ans === 'maybe') {
+    yes.style.display = 'block';
+  } else {
+    window.open('https://www.youtube.com/watch?v=7riEMfoz9Bc&list=RD7riEMfoz9Bc&start_radio=1', '_blank');
+  }
+}
+
+function submitQuest() {
+  const d = document.getElementById('pick-date').value;
+  const t = document.getElementById('pick-time').value;
+
+  if (!selectedQuest)  { alert('I MEAN... YOU GOTTA PICK SOMETHING FIRST DUH');      return; }
+  if (!d || !t)        { alert('DUDEEE, YOU FORGOT TO PICK THE DATE AND TIME');    return; }
+
+  const body    = encodeURIComponent(`Quest: ${selectedQuest}\nDate: ${d}\nTime: ${t}`);
+  const subject = encodeURIComponent('yuhhhh, thank youuu');
+
+  document.getElementById('yes-response').style.display     = 'none';
+  document.getElementById('success-response').style.display = 'block';
+}
+
+const songs = ['Breathe Deeper', 'Ring Ring Ring', 'Good Grief'];
+
+const songFiles = [
+  new Audio('breathe-deeper.mp3'),
+    new Audio('ring-ring-ring.mp3'),
+      new Audio('good-grief.mp3'),
+];
+
+let currentSong = 0;
+let playing     = false;
+let volVal      = 70;
+
+function updateSongDisplay() {
+  document.getElementById('bp-song-name').textContent = songs[currentSong];
+}
+
+function syncPlayButtons() {
+  document.getElementById('play-icon').src = playing ? 'pause.png' : 'play.png';
+}
+
+function togglePlay() {
+  playing = !playing;
+  syncPlayButtons();
+  const a = songFiles[currentSong];
+  if (a) { playing ? a.play() : a.pause(); }
+}
+
+function nextSong() {
+  if (songFiles[currentSong]) songFiles[currentSong].pause();
+  currentSong = (currentSong + 1) % songs.length;
+  updateSongDisplay();
+  changeBgTint();
+  const a = songFiles[currentSong];
+  if (playing && a) { a.volume = volVal / 100; a.play(); }
+}
+
+function prevSong() {
+  if (songFiles[currentSong]) songFiles[currentSong].pause();
+  currentSong = (currentSong - 1 + songs.length) % songs.length;
+  updateSongDisplay();
+  changeBgTint();
+  const a = songFiles[currentSong];
+  if (playing && a) { a.volume = volVal / 100; a.play(); }
+}
+
+function setVol(v) {
+  volVal = v;
+  const a = songFiles[currentSong];
+  if (a) a.volume = v / 100;
+}
+
+
+songFiles.forEach((a, i) => {
+  if (a) a.addEventListener('ended', () => nextSong());
+});
+
+
+const bgTints = [
+  'linear-gradient(135deg,#fdf6ff 0%,#f0f8ff 40%,#fff8f0 70%,#f5fff8 100%)',
+  'linear-gradient(135deg,#f0fff8 0%,#fdf6ff 40%,#fff0f8 70%,#f8f0ff 100%)',
+  'linear-gradient(135deg,#fff0f8 0%,#f0f8ff 40%,#fdfff0 70%,#f8fff0 100%)',
+];
+
+function changeBgTint() {
+  document.getElementById('gradient-bg').style.background = bgTints[currentSong % bgTints.length];
+}
+
+
+const compliments = [
+  'i guesss you have great music taste.',
+  "i'd probably beat you at zelda... (im KIDDING dude dw...)",
+  'still one of the sweetest people i know.',
+  'breathe deeper is a good favorite song. i loved it as you can tell in the video',
+  'you somehow make everything interesting, idk how you do it.',
+  'they call me the goat for a reason btww.',
+];
+
+let ci = 0;
+const ctxt = document.getElementById('compliment-text');
+ctxt.textContent = compliments[ci];
+
+setInterval(() => {
+  ctxt.style.opacity = '0';
+  setTimeout(() => {
+    ci = (ci + 1) % compliments.length;
+    ctxt.textContent  = compliments[ci];
+    ctxt.style.opacity = '1';
+  }, 900);
+}, 7000);
+</script>
+
+</body>
+</html>
