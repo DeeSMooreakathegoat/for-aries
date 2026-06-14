@@ -124,7 +124,6 @@
     color: #333; transition: all 0.25s ease; letter-spacing: 0.03em;
     min-width: 110px;
   }
-  /* --- choice btn tooltip --- */
   .choice-btn { position: relative; }
   .choice-btn::after {
     content: attr(data-tip);
@@ -138,7 +137,6 @@
   }
   .choice-btn:hover::after { opacity: 1; }
 
-  /* --- loading message --- */
   #loading-msg {
     position: fixed; inset: 0; z-index: 50;
     display: flex; align-items: center; justify-content: center;
@@ -150,7 +148,6 @@
     opacity: 0; transition: opacity 0.6s ease;
   }
 
-  /* --- pictures tab --- */
   #pictures { gap: 2rem; }
   #pictures h2 { margin-bottom: 0; }
   .pics-grid {
@@ -304,10 +301,10 @@
 <div id="floaters"></div>
 
 <div id="intro">
-  <h1>To Airibella From Dee</h1>
+  <h1>To Airibella, From Dee.</h1>
   <p>
-   Sooo, as you can tell, I made something for ya<br>
-    <em>(ANDDD my discord coding friend helped ALOTTTTT "maybe even TOOO much... they pretty much helped me with everything all saturday / sunday night... since i dont really code in html / css before",<br>so say thank you to them for me)</em>
+   Sooo, as you can tell, I.. or WE i guess made something for ya<br>
+    <em> READ : (ANDDD i say that because my discord coding friend helped ALOTTTTT "maybe even TOOO much since he did the whole menu stuff... they pretty much helped me with everything all saturday / sunday night... since i dont really code in html / css before and im learning.. I did the photos section, and helped with the music player. and to be honest, for the music player part i asked ai a better understanding on different things to help me do the music player with my friend". But yeah, BIGGG thank you to my friend and say thank you to them for me.. Anyways)</em>
   </p>
   <button id="enter-btn" onclick="enterSite()">You can Click Enter Now.. HURRY UP</button>
 </div>
@@ -407,6 +404,7 @@
 </div>
 
 <div id="bottom-player">
+  <img src="disc.gif" style="width:36px;height:36px;border-radius:50%;object-fit:cover;opacity:0.85;flex-shrink:0;">
   <div class="bp-song">
     now playing<span id="bp-song-name">Breathe Deeper</span>
   </div>
