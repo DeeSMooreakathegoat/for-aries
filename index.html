@@ -461,6 +461,7 @@ function enterSite() {
         showSection('dates');
         setTimeout(() => {
           document.getElementById('bottom-player').classList.add('visible');
+          document.getElementById('mailbox-btn').classList.add('visible');
         }, 600);
       }, 700);
     }, 3000);
@@ -621,6 +622,133 @@ setInterval(() => {
     ctxt.style.opacity = '1';
   }, 900);
 }, 7000);
+</script>
+
+<!-- ===== MAILBOX ===== -->
+<div id="mailbox-btn" onclick="toggleMailbox()">
+  <img src="mailbox.png" alt="mailbox" id="mailbox-icon">
+  <span id="mailbox-badge"></span>
+</div>
+
+<div id="mailbox-popup">
+  <div id="mailbox-header">
+    <span>notes for you to read (i hope you read them🤍)</span>
+    <button onclick="toggleMailbox()" id="mailbox-close">✕</button>
+  </div>
+  <div id="mailbox-notes">
+
+    <!-- ============================
+         ADD / EDIT YOUR NOTES HERE
+         Just copy a <div class="note"> block and change the text!
+         ============================ -->
+
+    <div class="note">
+      <div class="note-label">To Aries, From Dee</div>
+      <div class="note-text">soooo, did you answer yettt or? </div>
+    </div>
+
+    <div class="note">
+      <div class="note-label">btw</div>
+      <div class="note-text">and btw, i carried you AND veah in fortnite. just saying...</div>
+    </div>
+
+  </div>
+</div>
+
+<style>
+  #mailbox-btn {
+    position: fixed; bottom: 5.5rem; right: 1.5rem;
+    z-index: 300; cursor: pointer;
+    width: 52px; height: 52px;
+    display: none; /* hidden until site loads */
+    align-items: center; justify-content: center;
+  }
+  #mailbox-btn.visible { display: flex; }
+  #mailbox-icon { width: 100%; height: 100%; object-fit: contain; }
+
+  #mailbox-badge {
+    position: absolute; top: -4px; right: -4px;
+    width: 10px; height: 10px;
+    background: #e06060; border-radius: 50%;
+    display: block;
+  }
+
+  #mailbox-popup {
+    position: fixed; bottom: 9.5rem; right: 1.5rem;
+    z-index: 299;
+    width: min(320px, 88vw);
+    background: #fafaf8;
+    border: 0.5px solid #e8e8e4;
+    border-radius: 14px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+  #mailbox-popup.open {
+    display: flex;
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  #mailbox-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0.85rem 1.1rem;
+    border-bottom: 0.5px solid #eeede8;
+    font-size: 0.8rem; color: #aaa; letter-spacing: 0.05em;
+  }
+  #mailbox-close {
+    background: none; border: none; color: #ccc;
+    cursor: pointer; font-size: 0.85rem; padding: 0;
+    transition: color 0.15s;
+  }
+  #mailbox-close:hover { color: #555; }
+
+  #mailbox-notes {
+    display: flex; flex-direction: column; gap: 0;
+    max-height: 280px; overflow-y: auto;
+    padding: 0.5rem 0;
+  }
+
+  .note {
+    padding: 0.9rem 1.1rem;
+    border-bottom: 0.5px solid #f0efea;
+    transition: background 0.15s;
+  }
+  .note:last-child { border-bottom: none; }
+  .note:hover { background: #f5f4f0; }
+
+  .note-label {
+    font-size: 0.72rem; color: #bbb;
+    letter-spacing: 0.06em; margin-bottom: 0.35rem;
+  }
+  .note-text {
+    font-size: 0.92rem; color: #333;
+    line-height: 1.5;
+  }
+</style>
+
+<script>
+  function toggleMailbox() {
+    const popup = document.getElementById('mailbox-popup');
+    if (popup.classList.contains('open')) {
+      popup.style.opacity = '0';
+      popup.style.transform = 'translateY(10px)';
+      setTimeout(() => { popup.classList.remove('open'); }, 250);
+    } else {
+      popup.classList.add('open');
+      // tiny delay so transition fires
+      requestAnimationFrame(() => {
+        popup.style.opacity = '1';
+        popup.style.transform = 'translateY(0)';
+      });
+      // hide the red dot once opened
+      document.getElementById('mailbox-badge').style.display = 'none';
+    }
+  }
 </script>
 
 </body>
