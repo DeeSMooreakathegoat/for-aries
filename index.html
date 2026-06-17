@@ -293,6 +293,56 @@
     font-weight: 400; font-size: 1.4rem; color: #222;
     display: block; margin-bottom: 0.5rem;
   }
+
+  /* ── SECRET STAR ── */
+  #secret-star {
+    position: fixed;
+    top: 1.1rem; right: 1.4rem;
+    z-index: 200;
+    font-size: 1.3rem;
+    color: #d4b8ff;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.8s ease, transform 0.3s ease, color 0.3s ease;
+    user-select: none;
+    line-height: 1;
+  }
+  #secret-star.visible { opacity: 1; }
+  #secret-star:hover { color: #b88fe8; transform: scale(1.25) rotate(20deg); }
+  #secret-star.used { opacity: 0 !important; pointer-events: none; }
+
+  /* ── SECRET OVERLAY ── */
+  #secret-overlay {
+    position: fixed; inset: 0; z-index: 500;
+    display: none;
+    align-items: center; justify-content: center;
+  }
+  #secret-overlay.active { display: flex; }
+  #secret-blur-bg {
+    position: absolute; inset: 0;
+    background: rgba(250,248,255,0.5);
+    backdrop-filter: blur(0px);
+    transition: backdrop-filter 1.8s ease, background 1.8s ease;
+  }
+  #secret-overlay.active #secret-blur-bg {
+    backdrop-filter: blur(18px);
+    background: rgba(250,248,255,0.72);
+  }
+  #secret-text-wrap {
+    position: relative; z-index: 1;
+    text-align: center; padding: 2rem;
+  }
+  .secret-line {
+    font-size: clamp(1.1rem, 3vw, 1.55rem);
+    font-weight: 400;
+    color: #3a2a4a;
+    letter-spacing: 0.06em;
+    line-height: 1.9;
+    opacity: 0;
+    transition: opacity 1.1s ease;
+    white-space: pre-line;
+  }
+  .secret-line.visible { opacity: 1; }
 </style>
 </head>
 <body>
@@ -303,7 +353,7 @@
 <div id="intro">
   <h1>To Airibella, From Dee.</h1>
   <p>
-   Sooo, as you can tell, I.. or WE i guess made something for ya<br>
+   Sooo, As you're reading this... We just got done playing fort.. And as you can tell, I.. or WE i guess made something for ya in 4-5 days...<br>
     <em> READ : (ANDDD i say that because my discord coding friend helped ALOTTTTT "maybe even TOOO much since he did the whole menu stuff... they pretty much helped me with everything all saturday / sunday night... since i dont really code in html / css before and im learning.. I did the photos section, and helped with the music player. and to be honest, for the music player part i asked ai a better understanding on different things to help me do the music player with my friend". But yeah, BIGGG thank you to my friend and say thank you to them for me.. Anyways)</em>
   </p>
   <button id="enter-btn" onclick="enterSite()">You can Click Enter Now.. HURRY UP</button>
@@ -314,12 +364,15 @@
 <div id="main-site">
   <nav>
     <a onclick="showSection('dates')">hangouts / dates</a>
-    <a onclick="showSection('pictures')">pictures / things we did</a>
+    <a onclick="showSection('pictures')">pictures / things we did together</a>
     <a onclick="showSection('more')">more</a>
+    <a onclick="showSection('future')" style="color:#c9a0e8;font-style:italic;">LIVE EVENT (coming soon) / our future ❤️</a>
   </nav>
 
+  <div id="secret-star" onclick="triggerSecret()" title="psst... dont click me">⭐</div>
+
   <section id="dates">
-    <h2>Hey, question. Do you wanna go on a date / hangout with me? It's up to you :)</h2>
+    <h2>Heyyy. Sooo, i have a tiny little question for ya. Would you maybe wanna go on a date with me sometime? Or even just hang out and spend some time togetherr? No pressure and no worries at all ofcc, I just thought it'd be really nice :)</h2>
     <div class="btn-row">
       <button class="choice-btn" onclick="handleAnswer('yes')" data-tip="amazing choice...">YES!</button>
       <button class="choice-btn" onclick="handleAnswer('maybe')" data-tip="okayy yessirr">Maybe</button>
@@ -351,6 +404,25 @@
               <span style="color:#bbb;font-size:.82rem">(ik you dont play, but yeah)</span>
             </span>
           </li>
+           <li onclick="toggleQuest(this)">
+            <span class="box">✅</span>
+            <span>Your decision...<br>
+              <span style="color:#bbb;font-size:.82rem">(i'd be down to see what ya have in store frfr)</span>
+            </span>
+                           <li style="opacity:.55; cursor:not-allowed; pointer-events:none;">
+                        <span class="box">🔒</span>
+                  <span>Watching Fireworks on the 4th of July together<br>
+               <span style="color:#bbb;font-size:.82rem">(locked for now.. coming soon doee)</span>
+            </span>
+          </li>
+
+<li style="opacity:.55; cursor:not-allowed; pointer-events:none;">
+  <span class="box">🔒</span>
+  <span>Arcade Date?<br>
+    <span style="color:#bbb;font-size:.82rem">(locked for now... maybe eventually doeee )</span>
+  </span>
+</li>
+          </li>
           <li onclick="toggleQuest(this)">
             <span class="box">✅</span>
             <span>Walking around the niagara falls frrr / Riding bikes </span>
@@ -380,7 +452,7 @@
 
       <div id="success-response" style="display:none" class="success-msg">
         <strong>Thank you....</strong>
-        PLEASEEE again... Take a screenshot of it, and send it to me. I'll see you then hopefully :)
+        PLEASEEE again... Take a screenshot of it and circle your answers "YES, MAYBE, NO" please, and send it to me via snapchatt or anything else i guess weirdo... We'll talk about it, and when it happens and we figure it out, I'll see you then hopefully :)
         I'll add more things to this website as it goes on...
       </div>
 
@@ -401,6 +473,21 @@
     <p id="more-text">this doesn't work rn atm... by "dosen't work" i meant that we didnt even code anything in for that yet lmaooo. and this is ONLY because i got lazy and tired. HOWEVER, Be on the lookout for a QUIZ section </p>
   </section>
 
+  <section id="future">
+    <h2 style="color:#c9a0e8;">LIVE EVENT (pretty much) ❤️ our future</h2>
+    <p style="color:#aaa;font-size:1rem;line-height:2;letter-spacing:0.04em;">
+      coming soon when it's ready ofc...<br>
+      <span style="font-size:0.82rem;color:#ccc;font-style:italic;">(stay tuned. it'll be worth it frfr.)</span>
+    </p>
+  </section>
+
+</div>
+
+<div id="secret-overlay">
+  <div id="secret-blur-bg"></div>
+  <div id="secret-text-wrap">
+    <p id="secret-line" class="secret-line"></p>
+  </div>
 </div>
 
 <div id="bottom-player">
@@ -462,6 +549,7 @@ function enterSite() {
         setTimeout(() => {
           document.getElementById('bottom-player').classList.add('visible');
           document.getElementById('mailbox-btn').classList.add('visible');
+          document.getElementById('secret-star').classList.add('visible');
         }, 600);
       }, 700);
     }, 3000);
@@ -533,12 +621,20 @@ function submitQuest() {
   document.getElementById('success-response').style.display = 'block';
 }
 
-const songs = ['Breathe Deeper', 'Ring Ring Ring', 'Good Grief'];
+const songs = ['Breathe Deeper', 'Ring Ring Ring', 'Good Grief', 'Start','Ethereal Connection', 'Piece Of Heaven', 'The Moment', 'Not My World', 'Oblivion', 'Private', 'Not Allowed '];
 
 const songFiles = [
   new Audio('breathe-deeper.mp3'),
     new Audio('ring-ring-ring.mp3'),
       new Audio('good-grief.mp3'),
+        new Audio('start.mp3'),
+          new Audio('ethereal-connection.mp3'),
+            new Audio('piece-of-heaven.mp3'),
+             new Audio('the-moment.mp3'),
+              new Audio('not-my-world.mp3'),
+                new Audio('oblivion.mp3'),
+                  new Audio('private.mp3'),
+                    new Audio('not-allowed.mp3'),
 ];
 
 let currentSong = 0;
@@ -622,9 +718,81 @@ setInterval(() => {
     ctxt.style.opacity = '1';
   }, 900);
 }, 7000);
+
+let secretUsed = false;
+
+const secretLines = [
+  "hey.",
+  "you found that little secret star some howw (it was obv ngl)",
+  "soooo. just because you found it, i guess i'll tell you something...",
+  "i could've spent this time doing literally anything else.",
+  "playing games.\n\nsleeping (big on that one i stayed up till 6am doing parts of this).\n\ndestroying ya in zelda (in my dreams ofc, that'll never happen).",
+  "however, i wanted to make this for you instead.",
+  "because i thought you'd like it, and it might even make you smile after TODAY OFC, or yesterday, or whatever day you we're not feeling ya bestt yknowww!",
+  "and honestly...",
+  "that was enough of a reason, and that was all the reason i needed.",
+  "thanks for being you, aries ❤️",
+  "and NEVERRR... EVERRR forget how much happiness and light ya bring to the people around you, Airibella :)",
+];
+
+const secretPauses = [1400, 1600, 1600, 1800, 2400, 1500, 8000, 1400, 8000, 8000, 8000];
+
+function triggerSecret() {
+  if (secretUsed) return;
+  secretUsed = true;
+
+  const star    = document.getElementById('secret-star');
+  const overlay = document.getElementById('secret-overlay');
+  const line    = document.getElementById('secret-line');
+  const audio   = songFiles[currentSong];
+
+  star.classList.add('used');
+
+  if (audio && playing) {
+    let v = audio.volume;
+    const fadeDown = setInterval(() => {
+      v = Math.max(0.20, v - 0.04);
+      audio.volume = v;
+      if (v <= 0.20) clearInterval(fadeDown);
+    }, 80);
+  }
+
+  overlay.classList.add('active');
+
+  let i = 0;
+
+  function showNext() {
+    if (i >= secretLines.length) {
+      line.classList.remove('visible');
+      setTimeout(() => {
+        overlay.classList.remove('active');
+        if (audio && playing) {
+          let v = audio.volume;
+          const fadeUp = setInterval(() => {
+            v = Math.min(volVal / 100, v + 0.03);
+            audio.volume = v;
+            if (v >= volVal / 100) clearInterval(fadeUp);
+          }, 80);
+        }
+        showSection('dates');
+      }, 1200);
+      return;
+    }
+
+    line.classList.remove('visible');
+    setTimeout(() => {
+      line.textContent = secretLines[i];
+      line.classList.add('visible');
+      const pause = secretPauses[i] || 1600;
+      i++;
+      setTimeout(showNext, pause);
+    }, 700);
+  }
+
+  setTimeout(showNext, 900);
+}
 </script>
 
-<!-- ===== MAILBOX ===== -->
 <div id="mailbox-btn" onclick="toggleMailbox()">
   <img src="mailbox.png" alt="mailbox" id="mailbox-icon">
   <span id="mailbox-badge"></span>
@@ -637,14 +805,11 @@ setInterval(() => {
   </div>
   <div id="mailbox-notes">
 
-    <!-- ============================
-         ADD / EDIT YOUR NOTES HERE
-         Just copy a <div class="note"> block and change the text!
-         ============================ -->
+    ----- ADD NOTES DOWN HERE (just to remind myself)
 
     <div class="note">
       <div class="note-label">To Aries, From Dee</div>
-      <div class="note-text">soooo, did you answer yettt or? </div>
+      <div class="note-text">soooo, did you answer the question yettt or? </div>
     </div>
 
     <div class="note">
