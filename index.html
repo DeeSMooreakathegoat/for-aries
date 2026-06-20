@@ -91,6 +91,7 @@
     display: flex; gap: 2.5rem; justify-content: center;
     padding: 2rem 0 1rem;
     font-size: 0.9rem; letter-spacing: 0.05em;
+    flex-wrap: wrap;
   }
   nav a {
     text-decoration: underline; color: #555;
@@ -207,11 +208,15 @@
   }
   .submit-btn {
     margin-top: 1.5rem; padding: 0.7rem 2rem;
-    background: #222; color: #fff; border: none; border-radius: 30px;
+    background-image: url('button.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    color: #555; border: none; border-radius: 0;
     font-family: inherit; font-size: 0.9rem; cursor: pointer;
-    letter-spacing: 0.08em; transition: all 0.25s ease;
+    letter-spacing: 0.08em; transition: opacity 0.25s ease;
   }
-  .submit-btn:hover { background: #444; transform: translateY(-1px); }
+  .submit-btn:hover { opacity: 0.75; transform: translateY(-1px); }
 
   #more-text { font-size: 0.9rem; color: #aaa; letter-spacing: 0.05em; margin-bottom: 3rem; }
 
@@ -232,19 +237,27 @@
     justify-content: center; margin-bottom: 1.2rem;
   }
   .ctrl-btn {
-    background: none; border: none; cursor: pointer;
-    font-size: 1.2rem; color: #666; padding: 0.3rem;
-    transition: color 0.2s;
+    background-image: url('button.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    border: none; cursor: pointer;
+    padding: 0.3rem 0.9rem;
+    display: inline-flex; align-items: center; justify-content: center;
+    transition: opacity 0.2s;
   }
-  .ctrl-btn:hover { color: #111; }
+  .ctrl-btn:hover { opacity: 0.75; }
   .play-btn {
-    width: 42px; height: 42px; border-radius: 50%;
-    border: 1.5px solid #ccc; display: flex;
+    width: 52px; height: 38px;
+    background-image: url('button.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    border: none; display: inline-flex;
     align-items: center; justify-content: center;
-    font-size: 1rem; cursor: pointer; background: none;
-    transition: all 0.2s; color: #444;
+    cursor: pointer; transition: opacity 0.2s; color: #444;
   }
-  .play-btn:hover { border-color: #888; background: rgba(0,0,0,0.04); }
+  .play-btn:hover { opacity: 0.75; }
   .vol-row { display: flex; align-items: center; gap: 8px; font-size: 0.75rem; color: #bbb; }
   .vol-row input[type="range"] { flex: 1; accent-color: #888; }
 
@@ -272,19 +285,27 @@
   }
   #bottom-player .bp-song span { color: #444; font-size: 0.85rem; display: block; }
   .bp-btn {
-    background: none; border: none; cursor: pointer;
-    font-size: 1rem; color: #888; padding: 0.2rem 0.4rem;
-    transition: color 0.2s;
+    background-image: url('button.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    border: none; cursor: pointer;
+    padding: 0.3rem 0.7rem;
+    display: inline-flex; align-items: center; justify-content: center;
+    transition: opacity 0.2s;
   }
-  .bp-btn:hover { color: #222; }
+  .bp-btn:hover { opacity: 0.75; }
   .bp-play {
-    width: 34px; height: 34px; border-radius: 50%;
-    border: 1.5px solid #ccc; display: flex;
+    width: 44px; height: 36px;
+    background-image: url('button.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    border: none; display: inline-flex;
     align-items: center; justify-content: center;
-    font-size: 0.85rem; cursor: pointer; background: none;
-    transition: all 0.2s; color: #555;
+    cursor: pointer; transition: opacity 0.2s;
   }
-  .bp-play:hover { border-color: #888; }
+  .bp-play:hover { opacity: 0.75; }
   .bp-vol { display: flex; align-items: center; gap: 6px; }
   .bp-vol input[type="range"] { width: 70px; accent-color: #aaa; }
 
@@ -293,6 +314,104 @@
     font-weight: 400; font-size: 1.4rem; color: #222;
     display: block; margin-bottom: 0.5rem;
   }
+
+  #schedule { gap: 1.6rem; }
+  .sched-note {
+    font-size: 0.84rem; color: #ccc;
+    letter-spacing: 0.04em; margin-top: -1.4rem;
+    margin-bottom: 0.2rem; font-style: italic;
+  }
+  .date-card {
+    width: 100%; max-width: 400px;
+    border: 0.5px solid #e8e8e4;
+    border-radius: 16px;
+    padding: 1.6rem 2rem;
+    background: rgba(255,255,255,0.55);
+    text-align: left;
+    transition: box-shadow 0.3s ease;
+  }
+  .date-card:hover { box-shadow: 0 6px 24px rgba(180,160,220,0.1); }
+  .date-card.locked { opacity: 0.42; }
+  .dc-day {
+    font-size: 0.68rem; color: #ccc;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    margin-bottom: 0.55rem;
+  }
+  .dc-activity {
+    font-size: 1.2rem; color: #333; font-weight: 400;
+    margin-bottom: 0.2rem;
+  }
+  .dc-when {
+    font-size: 0.85rem; color: #999;
+    letter-spacing: 0.03em; margin-bottom: 1rem;
+  }
+  .dc-status {
+    font-size: 0.7rem; letter-spacing: 0.08em;
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 0.22rem 0.9rem; border-radius: 20px;
+  }
+  .dc-status.confirmed {
+    background-image: url('button.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    color: #555; border: none;
+    padding: 0.42rem 1.3rem;
+    font-family: inherit;
+  }
+  .dc-status.pending {
+    background: rgba(210,190,255,0.11);
+    color: #b8a0e0; border: 0.5px solid rgba(210,190,255,0.33);
+  }
+
+  #idle-msg {
+    position: fixed; bottom: 4.8rem; left: 50%;
+    transform: translateX(-50%);
+    z-index: 25; font-size: 0.78rem; color: #c8b0e8;
+    letter-spacing: 0.06em; opacity: 0;
+    transition: opacity 1.5s ease; pointer-events: none;
+    white-space: nowrap;
+  }
+
+  #exit-modal {
+    position: fixed; inset: 0; z-index: 600;
+    display: flex; align-items: center; justify-content: center;
+    pointer-events: none; opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+  #exit-modal.open { opacity: 1; pointer-events: all; }
+  #exit-inner {
+    background: rgba(250,250,248,0.97);
+    border: 0.5px solid #e8e4f0;
+    border-radius: 20px;
+    padding: 2.4rem 2.8rem;
+    text-align: center;
+    max-width: 300px; width: 90%;
+    box-shadow: 0 12px 40px rgba(160,120,200,0.1);
+    transform: scale(0.95);
+    transition: transform 0.4s ease;
+  }
+  #exit-modal.open #exit-inner { transform: scale(1); }
+  #exit-title {
+    font-size: 1rem; color: #333;
+    line-height: 1.6; margin-bottom: 0.5rem;
+  }
+  #exit-sub {
+    font-size: 0.82rem; color: #bbb;
+    margin-bottom: 1.6rem; line-height: 1.6;
+  }
+  #exit-confirm-btn {
+    background-image: url('button.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    border: none; padding: 0.6rem 1.8rem;
+    font-family: inherit; font-size: 0.88rem;
+    color: #555; cursor: pointer;
+    letter-spacing: 0.05em;
+    transition: opacity 0.2s;
+  }
+  #exit-confirm-btn:hover { opacity: 0.75; }
 
   /* ── SECRET STAR ── */
   #secret-star {
@@ -311,7 +430,6 @@
   #secret-star:hover { color: #b88fe8; transform: scale(1.25) rotate(20deg); }
   #secret-star.used { opacity: 0 !important; pointer-events: none; }
 
-  /* ── SECRET OVERLAY ── */
   #secret-overlay {
     position: fixed; inset: 0; z-index: 500;
     display: none;
@@ -366,6 +484,7 @@
     <a onclick="showSection('dates')">hangouts / dates</a>
     <a onclick="showSection('pictures')">pictures / things we did together</a>
     <a onclick="showSection('more')">more</a>
+    <a onclick="showSection('schedule')" id="schedule-nav">scheduled datess</a>
     <a onclick="showSection('future')" style="color:#c9a0e8;font-style:italic;">LIVE EVENT (coming soon) / our future ❤️</a>
   </nav>
 
@@ -465,12 +584,34 @@
       <div class="pic-slot"><img src="photo1.png" alt=""></div>
       <div class="pic-slot"><img src="photo2.png" alt=""></div>
       <div class="pic-slot"><img src="photo3.png" alt=""></div>
+      <div class="pic-slot"><img src="photo4.png" alt=""></div>
+      <div class="pic-slot"><img src="photo5.png" alt=""></div>
+      <div class="pic-slot"><img src="photo6.png" alt=""></div>
     </div>
     <p class="pics-note">more to come... maybe eventually... ya never knoww</p>
   </section>
 
   <section id="more">
     <p id="more-text">this doesn't work rn atm... by "dosen't work" i meant that we didnt even code anything in for that yet lmaooo. and this is ONLY because i got lazy and tired. HOWEVER, Be on the lookout for a QUIZ section </p>
+  </section>              
+
+  <section id="schedule">
+    <h2>our schedule so far yuhhhh 🗓️</h2>
+    <p class="sched-note">keeping track of it</p>
+
+    <div class="date-card">
+      <div class="dc-day">day 01</div>
+      <div class="dc-activity">Movie Date 🎬</div>
+      <div class="dc-when">July 1st &nbsp;·&nbsp; 5:55 PM</div>
+      <span class="dc-status confirmed">✓ &nbsp;confirmed</span>
+    </div>
+
+    <div class="date-card locked">
+      <div class="dc-day">day 02</div>
+      <div class="dc-activity">???</div>
+      <div class="dc-when">coming soon... hopefully</div>
+      <span class="dc-status pending">🔒 &nbsp;stay tuned</span>
+    </div>
   </section>
 
   <section id="future">
@@ -505,6 +646,17 @@
 </div>
 
 <div id="compliment-bar"><span id="compliment-text"></span></div>
+<div id="idle-msg">ya still here? i really hope you're smiling rn.</div>
+
+<div id="exit-modal">
+  <div id="exit-inner">
+    <p id="exit-title">wait, are you sure you wanna go?</p>
+    <p id="exit-sub">you don't have to leave just yet...</p>
+    <button id="exit-confirm-btn" onclick="closeExitModal()">
+      <span id="exit-btn-text">i'll stay :)</span>
+    </button>
+  </div>
+</div>
 
 
 <script>
@@ -791,6 +943,84 @@ function triggerSecret() {
 
   setTimeout(showNext, 900);
 }
+const _origTitle = document.title;
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) {
+    document.title = "damn it... come back..";
+  } else {
+    document.title = "she's back huzzah!!";
+    setTimeout(() => { document.title = _origTitle; }, 3000);
+  }
+});
+
+let _idleTimer;
+let _idleActive = false;
+function _resetIdle() {
+  clearTimeout(_idleTimer);
+  if (_idleActive) return;
+  _idleTimer = setTimeout(() => {
+    _idleActive = true;
+    const m = document.getElementById('idle-msg');
+    if (m) {
+      m.style.opacity = '1';
+      setTimeout(() => {
+        m.style.opacity = '0';
+        setTimeout(() => { _idleActive = false; }, 1600);
+      }, 5000);
+    }
+  }, 2 * 60 * 1000);
+}
+['mousemove','keydown','click','scroll','touchstart'].forEach(ev => {
+  document.addEventListener(ev, _resetIdle, { passive: true });
+});
+_resetIdle();
+
+let exitAttempts = 0;
+let exitEnabled  = true;
+
+const exitData = [
+  {
+    title : "wait, are you sure you wanna go?",
+    sub   : "you don't have to leave just yet yknoww?",
+    btn   : "fine, i'll stay :)"
+  },
+  {
+    title : "you can't leave this website...",
+    sub   : "not allowed (get it). sorry.",
+    btn   : "okay fine..."
+  },
+  {
+    title : "i'm kidding lol.... go aheadd :) (i guesss)",
+    sub   : "come back soon though fr.",
+    btn   : "alright, bye"
+  }
+];
+
+function showExitModal() {
+  const data = exitData[exitAttempts];
+  if (!data) return;
+  document.getElementById('exit-title').textContent    = data.title;
+  document.getElementById('exit-sub').textContent      = data.sub;
+  document.getElementById('exit-btn-text').textContent = data.btn;
+  document.getElementById('exit-modal').classList.add('open');
+}
+
+function closeExitModal() {
+  document.getElementById('exit-modal').classList.remove('open');
+  exitAttempts++;
+  if (exitAttempts >= exitData.length) {
+    exitEnabled = false; 
+  }
+}
+
+document.addEventListener('mouseleave', function(e) {
+  if (e.clientY <= 4 && exitEnabled) {
+    // Only fire after the intro/loading screen is gone
+    const intro = document.getElementById('intro');
+    if (intro && intro.style.display !== 'none') return;
+    showExitModal();
+  }
+});
 </script>
 
 <div id="mailbox-btn" onclick="toggleMailbox()">
@@ -805,7 +1035,6 @@ function triggerSecret() {
   </div>
   <div id="mailbox-notes">
 
-    ----- ADD NOTES DOWN HERE (just to remind myself)
 
     <div class="note">
       <div class="note-label">To Aries, From Dee</div>
@@ -825,7 +1054,7 @@ function triggerSecret() {
     position: fixed; bottom: 5.5rem; right: 1.5rem;
     z-index: 300; cursor: pointer;
     width: 52px; height: 52px;
-    display: none; /* hidden until site loads */
+    display: none; 
     align-items: center; justify-content: center;
   }
   #mailbox-btn.visible { display: flex; }
@@ -866,11 +1095,17 @@ function triggerSecret() {
     font-size: 0.8rem; color: #aaa; letter-spacing: 0.05em;
   }
   #mailbox-close {
-    background: none; border: none; color: #ccc;
-    cursor: pointer; font-size: 0.85rem; padding: 0;
-    transition: color 0.15s;
+    background-image: url('button.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    border: none; color: #888;
+    cursor: pointer; font-size: 0.75rem;
+    padding: 0.2rem 0.7rem;
+    font-family: inherit;
+    transition: opacity 0.15s;
   }
-  #mailbox-close:hover { color: #555; }
+  #mailbox-close:hover { opacity: 0.7; }
 
   #mailbox-notes {
     display: flex; flex-direction: column; gap: 0;
@@ -905,12 +1140,10 @@ function triggerSecret() {
       setTimeout(() => { popup.classList.remove('open'); }, 250);
     } else {
       popup.classList.add('open');
-      // tiny delay so transition fires
       requestAnimationFrame(() => {
         popup.style.opacity = '1';
         popup.style.transform = 'translateY(0)';
       });
-      // hide the red dot once opened
       document.getElementById('mailbox-badge').style.display = 'none';
     }
   }
