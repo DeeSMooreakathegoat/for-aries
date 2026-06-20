@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>this is for aries frfr</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Calibri', 'Candara', sans-serif;
+    background: #fafaf8;
+    color: #1a1a1a;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  #gradient-bg {
+    position: fixed; inset: 0; z-index: 0;
+    background: linear-gradient(135deg, #fdf6ff 0%, #f0f8ff 40%, #fff8f0 70%, #f5fff8 100%);
+    background-size: 400% 400%;
+    animation: gradMove 18s ease infinite;
+    opacity: 0;
+    transition: opacity 2s ease;
+  }
+  @keyframes gradMove {
+    0%   { background-position: 0%   50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0%   50%; }
+  }
+
+  #floaters { position: fixed; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; }
+  .floater {
+    position: absolute;
+    font-size: 12px;
+    opacity: 0;
+    animation: floatUp linear infinite;
+  }
+  @keyframes floatUp {
+    0%   { transform: translateY(100vh) rotate(0deg);   opacity: 0; }
+    10%  { opacity: 0.35; }
+    90%  { opacity: 0.2;  }
+    100% { transform: translateY(-60px) rotate(360deg); opacity: 0; }
+  }
+
+  #intro {
+    position: fixed; inset: 0; z-index: 100;
+    background: #fafaf8;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    transition: opacity 1.4s ease;
+  }
+  #intro h1 {
+    font-size: clamp(1.8rem, 5vw, 3rem);
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    color: #2a2a2a;
+    margin-bottom: 1rem;
+  }
+  #intro p {
+    font-size: 1rem;
+    color: #777;
+    line-height: 1.8;
+    margin-bottom: 2.5rem;
+  }
+  #intro p em { color: #aaa; font-size: 0.88rem; }
+  #enter-btn {
+    background-image: url('button.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    border: none;
+    padding: 0.7rem 2.2rem;
+    font-size: 0.95rem;
+    color: #555;
+    cursor: pointer;
+    letter-spacing: 0.1em;
+    border-radius: 0;
+    transition: all 0.3s ease;
+    font-family: inherit;
+  }
+  #enter-btn:hover { opacity: 0.8; color: #222; }
+
+  #main-site {
+    position: relative; z-index: 10;
+    opacity: 0; transition: opacity 1.5s ease;
+    min-height: 100vh;
+  }
+
+  nav {
+    display: flex; gap: 2.5rem; justify-content: center;
+    padding: 2rem 0 1rem;
+    font-size: 0.9rem; letter-spacing: 0.05em;
+    flex-wrap: wrap;
+  }
+  nav a {
+    text-decoration: underline; color: #555;
+    cursor: pointer; transition: color 0.2s;
+    background: none; border: none;
+    font-family: inherit; font-size: inherit;
+  }
+  nav a:hover { color: #111; }
+
+  section {
+    max-width: 680px; margin: 0 auto; padding: 5rem 2rem;
+    min-height: 80vh; display: none; flex-direction: column;
+    align-items: center; text-align: center;
+  }
+  section.active { display: flex; animation: fadeIn 0.7s ease forwards; }
+  section.fade-out { animation: fadeOut 0.35s ease forwards; }
+  @keyframes fadeIn  { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
+
+  h2 { font-size: 1.5rem; font-weight: 400; margin-bottom: 2.5rem; color: #222; }
+
+  .btn-row { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; margin-top: 1.5rem; }
+  .choice-btn {
+    padding: 0.85rem 2.5rem; font-size: 1.1rem;
+    border: none; border-radius: 0;
+    background-image: url('button.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    cursor: pointer; font-family: inherit;
+    color: #333; transition: all 0.25s ease; letter-spacing: 0.03em;
+    min-width: 110px;
+  }
+  .choice-btn { position: relative; }
+  .choice-btn::after {
+    content: attr(data-tip);
+    position: absolute; bottom: calc(100% + 8px); left: 50%;
+    transform: translateX(-50%);
+    background: rgba(30,30,30,0.82); color: #fff;
+    font-size: 0.75rem; letter-spacing: 0.04em;
+    padding: 0.35rem 0.9rem; border-radius: 20px;
+    white-space: nowrap; pointer-events: none;
+    opacity: 0; transition: opacity 0.2s ease;
+  }
+  .choice-btn:hover::after { opacity: 1; }
+
+  #loading-msg {
+    position: fixed; inset: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: center;
+    pointer-events: none;
+  }
+  #loading-msg span {
+    font-size: 0.95rem; color: #aaa; letter-spacing: 0.06em;
+    font-style: italic;
+    opacity: 0; transition: opacity 0.6s ease;
+  }
+
+  #pictures { gap: 2rem; }
+  #pictures h2 { margin-bottom: 0; }
+  .pics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 12px; width: 100%; margin-top: 1rem;
+  }
+  .pics-grid .pic-slot {
+    aspect-ratio: 1 / 1; border-radius: 12px;
+    overflow: hidden; background: #f0f0ee;
+    border: 0.5px solid #e0e0de;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .pics-grid .pic-slot img {
+    width: 100%; height: 100%; object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+  .pics-grid .pic-slot:hover img { transform: scale(1.04); }
+  .pics-note {
+    font-size: 0.8rem; color: #bbb; margin-top: 0.5rem;
+    letter-spacing: 0.04em;
+  }
+
+  .choice-btn:hover { opacity: 0.82; transform: translateY(-1px); }
+  .choice-btn:active { transform: scale(0.97); }
+
+  #response-area { margin-top: 2.5rem; animation: fadeIn 0.7s ease; display: none; width: 100%; }
+  #response-area.visible { display: block; }
+  #response-area h3 { font-size: 1.3rem; font-weight: 400; margin-bottom: 1.5rem; color: #222; }
+
+  .quest-list { list-style: none; text-align: left; width: 100%; max-width: 340px; }
+  .quest-list li {
+    padding: 0.8rem 0.2rem; font-size: 0.97rem; color: #444;
+    cursor: pointer; display: flex; align-items: flex-start; gap: 10px;
+    line-height: 1.5;
+  }
+  .quest-list li:last-child { border-bottom: none; }
+  .quest-list li .box {
+    width: 16px; height: 16px; border: 1.5px solid #ccc;
+    border-radius: 3px; flex-shrink: 0; margin-top: 2px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; color: #888; transition: all 0.2s;
+  }
+  .quest-list li.selected .box { border-color: #888; background: #888; color: #fff; }
+
+  .picker-section { margin-top: 2rem; text-align: center; }
+  .picker-section label { display: block; font-size: 0.9rem; color: #777; margin-bottom: 0.5rem; }
+  .picker-section input[type="date"],
+  .picker-section input[type="time"] {
+    padding: 0.6rem 1rem; border: none; border-radius: 0;
+    font-family: inherit; font-size: 0.9rem; color: #444;
+    background-image: url('button.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    outline: none; margin: 0.3rem;
+  }
+  .submit-btn {
+    margin-top: 1.5rem; padding: 0.7rem 2rem;
+    background-image: url('button.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    color: #555; border: none; border-radius: 0;
+    font-family: inherit; font-size: 0.9rem; cursor: pointer;
+    letter-spacing: 0.08em; transition: opacity 0.25s ease;
+  }
+  .submit-btn:hover { opacity: 0.75; transform: translateY(-1px); }
+
+  #more-text { font-size: 0.9rem; color: #aaa; letter-spacing: 0.05em; margin-bottom: 3rem; }
+
+  #player-area {
+    opacity: 0; transition: opacity 1.2s ease;
+    margin-top: 1rem; width: 100%;
+  }
+  #player-area.visible { opacity: 1; }
+  .player-card {
+    border: 0.5px solid #ddd; border-radius: 16px;
+    padding: 1.5rem 2rem; background: rgba(255,255,255,0.6);
+    max-width: 380px; margin: 0 auto;
+  }
+  .player-card .label { font-size: 0.75rem; color: #bbb; letter-spacing: 0.1em; margin-bottom: 0.2rem; }
+  .player-card .song-name { font-size: 1.1rem; color: #333; margin-bottom: 1.2rem; }
+  .player-controls {
+    display: flex; align-items: center; gap: 1rem;
+    justify-content: center; margin-bottom: 1.2rem;
+  }
+  .ctrl-btn {
+    background-image: url('button.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    border: none; cursor: pointer;
+    padding: 0.3rem 0.9rem;
+    display: inline-flex; align-items: center; justify-content: center;
+    transition: opacity 0.2s;
+  }
+  .ctrl-btn:hover { opacity: 0.75; }
+  .play-btn {
+    width: 52px; height: 38px;
+    background-image: url('button.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    border: none; display: inline-flex;
+    align-items: center; justify-content: center;
+    cursor: pointer; transition: opacity 0.2s; color: #444;
+  }
+  .play-btn:hover { opacity: 0.75; }
+  .vol-row { display: flex; align-items: center; gap: 8px; font-size: 0.75rem; color: #bbb; }
+  .vol-row input[type="range"] { flex: 1; accent-color: #888; }
+
+  #compliment-bar {
+    position: fixed; bottom: 70px; left: 0; right: 0; z-index: 20;
+    text-align: center; padding: 0.6rem;
+    font-size: 0.82rem; color: #aaa; letter-spacing: 0.05em;
+    pointer-events: none;
+  }
+  #compliment-bar span { transition: opacity 0.8s ease; }
+
+  #bottom-player {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 30;
+    background: rgba(250,250,248,0.88);
+    backdrop-filter: blur(12px);
+    border-top: 0.5px solid #e8e8e8;
+    display: flex; align-items: center; justify-content: center;
+    gap: 1.4rem; padding: 0.6rem 1.5rem;
+    opacity: 0; transition: opacity 1s ease;
+  }
+  #bottom-player.visible { opacity: 1; }
+  #bottom-player .bp-song {
+    font-size: 0.8rem; color: #888; letter-spacing: 0.04em;
+    min-width: 130px; text-align: center;
+  }
+  #bottom-player .bp-song span { color: #444; font-size: 0.85rem; display: block; }
+  .bp-btn {
+    background-image: url('button.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    border: none; cursor: pointer;
+    padding: 0.3rem 0.7rem;
+    display: inline-flex; align-items: center; justify-content: center;
+    transition: opacity 0.2s;
+  }
+  .bp-btn:hover { opacity: 0.75; }
+  .bp-play {
+    width: 44px; height: 36px;
+    background-image: url('button.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    border: none; display: inline-flex;
+    align-items: center; justify-content: center;
+    cursor: pointer; transition: opacity 0.2s;
+  }
+  .bp-play:hover { opacity: 0.75; }
+  .bp-vol { display: flex; align-items: center; gap: 6px; }
+  .bp-vol input[type="range"] { width: 70px; accent-color: #aaa; }
+
+  .success-msg { font-size: 1.1rem; color: #555; line-height: 2; }
+  .success-msg strong {
+    font-weight: 400; font-size: 1.4rem; color: #222;
+    display: block; margin-bottom: 0.5rem;
+  }
+
+  #schedule { gap: 1.6rem; }
+  .sched-note {
+    font-size: 0.84rem; color: #ccc;
+    letter-spacing: 0.04em; margin-top: -1.4rem;
+    margin-bottom: 0.2rem; font-style: italic;
+  }
+  .date-card {
+    width: 100%; max-width: 400px;
+    border: 0.5px solid #e8e8e4;
+    border-radius: 16px;
+    padding: 1.6rem 2rem;
+    background: rgba(255,255,255,0.55);
+    text-align: left;
+    transition: box-shadow 0.3s ease;
+  }
+  .date-card:hover { box-shadow: 0 6px 24px rgba(180,160,220,0.1); }
+  .date-card.locked { opacity: 0.42; }
+  .dc-day {
+    font-size: 0.68rem; color: #ccc;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    margin-bottom: 0.55rem;
+  }
+  .dc-activity {
+    font-size: 1.2rem; color: #333; font-weight: 400;
+    margin-bottom: 0.2rem;
+  }
+  .dc-when {
+    font-size: 0.85rem; color: #999;
+    letter-spacing: 0.03em; margin-bottom: 1rem;
+  }
+  .dc-status {
+    font-size: 0.7rem; letter-spacing: 0.08em;
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 0.22rem 0.9rem; border-radius: 20px;
+  }
+  .dc-status.confirmed {
+    background-image: url('button.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    color: #555; border: none;
+    padding: 0.42rem 1.3rem;
+    font-family: inherit;
+  }
+  .dc-status.pending {
+    background: rgba(210,190,255,0.11);
+    color: #b8a0e0; border: 0.5px solid rgba(210,190,255,0.33);
+  }
+
+  #idle-msg {
+    position: fixed; bottom: 4.8rem; left: 50%;
+    transform: translateX(-50%);
+    z-index: 25; font-size: 0.78rem; color: #c8b0e8;
+    letter-spacing: 0.06em; opacity: 0;
+    transition: opacity 1.5s ease; pointer-events: none;
+    white-space: nowrap;
+  }
+
+  #exit-modal {
+    position: fixed; inset: 0; z-index: 600;
+    display: flex; align-items: center; justify-content: center;
+    pointer-events: none; opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+  #exit-modal.open { opacity: 1; pointer-events: all; }
+  #exit-inner {
+    background: rgba(250,250,248,0.97);
+    border: 0.5px solid #e8e4f0;
+    border-radius: 20px;
+    padding: 2.4rem 2.8rem;
+    text-align: center;
+    max-width: 300px; width: 90%;
+    box-shadow: 0 12px 40px rgba(160,120,200,0.1);
+    transform: scale(0.95);
+    transition: transform 0.4s ease;
+  }
+  #exit-modal.open #exit-inner { transform: scale(1); }
+  #exit-title {
+    font-size: 1rem; color: #333;
+    line-height: 1.6; margin-bottom: 0.5rem;
+  }
+  #exit-sub {
+    font-size: 0.82rem; color: #bbb;
+    margin-bottom: 1.6rem; line-height: 1.6;
+  }
+  #exit-confirm-btn {
+    background-image: url('button.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    border: none; padding: 0.6rem 1.8rem;
+    font-family: inherit; font-size: 0.88rem;
+    color: #555; cursor: pointer;
+    letter-spacing: 0.05em;
+    transition: opacity 0.2s;
+  }
+  #exit-confirm-btn:hover { opacity: 0.75; }
+
+  /* ── SECRET STAR ── */
+  #secret-star {
+    position: fixed;
+    top: 1.1rem; right: 1.4rem;
+    z-index: 200;
+    font-size: 1.3rem;
+    color: #d4b8ff;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.8s ease, transform 0.3s ease, color 0.3s ease;
+    user-select: none;
+    line-height: 1;
+  }
+  #secret-star.visible { opacity: 1; }
+  #secret-star:hover { color: #b88fe8; transform: scale(1.25) rotate(20deg); }
+  #secret-star.used { opacity: 0 !important; pointer-events: none; }
+
+  #secret-overlay {
+    position: fixed; inset: 0; z-index: 500;
+    display: none;
+    align-items: center; justify-content: center;
+  }
+  #secret-overlay.active { display: flex; }
+  #secret-blur-bg {
+    position: absolute; inset: 0;
+    background: rgba(250,248,255,0.5);
+    backdrop-filter: blur(0px);
+    transition: backdrop-filter 1.8s ease, background 1.8s ease;
+  }
+  #secret-overlay.active #secret-blur-bg {
+    backdrop-filter: blur(18px);
+    background: rgba(250,248,255,0.72);
+  }
+  #secret-text-wrap {
+    position: relative; z-index: 1;
+    text-align: center; padding: 2rem;
+  }
+  .secret-line {
+    font-size: clamp(1.1rem, 3vw, 1.55rem);
+    font-weight: 400;
+    color: #3a2a4a;
+    letter-spacing: 0.06em;
+    line-height: 1.9;
+    opacity: 0;
+    transition: opacity 1.1s ease;
+    white-space: pre-line;
+  }
+  .secret-line.visible { opacity: 1; }
+</style>
+</head>
+<body>
+
+<div id="gradient-bg"></div>
+<div id="floaters"></div>
+
+<div id="intro">
+  <h1>To Airibella, From Dee.</h1>
+  <p>
+   Sooo, As you're reading this... We just got done playing fort (Sooo... nevermind im so so sorry).. And as you can tell, I.. or WE i guess made something for ya in 4-5 days...<br>
+    <em> READ : (ANDDD i say that because my discord coding friend helped ALOTTTTT "maybe even TOOO much since he did the whole menu stuff... they pretty much helped me with everything all saturday / sunday night... since i dont really code in html / css before and im learning.. I did the photos section, and helped with the music player. and to be honest, for the music player part i asked ai a better understanding on different things to help me do the music player with my friend". But yeah, BIGGG thank you to my friend and say thank you to them for me.. Anyways)</em>
+  </p>
+  <button id="enter-btn" onclick="enterSite()">You can Click Enter Now.. HURRY UP</button>
+</div>
+
+<div id="loading-msg"><span id="loading-text">loading it up frr... (i meant destroying ya trash self at totk(im kidding...)</span></div>
+
+<div id="main-site">
+  <nav>
+    <a onclick="showSection('dates')">hangouts / dates</a>
+    <a onclick="showSection('pictures')">pictures / things we did together</a>
+    <a onclick="showSection('more')">more</a>
+    <a onclick="showSection('schedule')" id="schedule-nav">scheduled datess</a>
+    <a onclick="showSection('future')" style="color:#c9a0e8;font-style:italic;">LIVE EVENT (coming soon) / our future ❤️</a>
+  </nav>
+
+  <div id="secret-star" onclick="triggerSecret()" title="psst... dont click me">⭐</div>
+
+  <section id="dates">
+    <h2>Heyyy. Sooo, i have a tiny little question for ya. Would you maybe wanna go on a date with me sometime? Or even just hang out and spend some time togetherr? No pressure and no worries at all ofcc, I just thought it'd be really nice :)</h2>
+    <div class="btn-row">
+      <button class="choice-btn" onclick="handleAnswer('yes')" data-tip="amazing choice...">YES!</button>
+      <button class="choice-btn" onclick="handleAnswer('maybe')" data-tip="okayy yessirr">Maybe</button>
+      <button class="choice-btn" onclick="handleAnswer('no')" data-tip="yeowch. please dont click that...">No</button>
+    </div>
+
+    <div id="response-area">
+
+      <div id="yes-response">
+        <h3>OH SHOOTTTT! Bettttt.</h3>
+        <p style="color:#888;font-size:.9rem;margin-bottom:1.5rem;">Choose a place for our date / hangout</p>
+
+        <ul class="quest-list" id="quest-list">
+          <li onclick="toggleQuest(this)">
+            <span class="box">✅</span>
+            <span>At the mall</span>
+               <span style="color:#bbb;font-size:.82rem">(Very Recommended!)</span>
+            <span>    
+          </li>
+          <li onclick="toggleQuest(this)">
+            <span class="box">✅</span>
+            <span>Movie Date</span>
+               <span style="color:#bbb;font-size:.82rem">(Very Recommended!)</span>
+            <span>            
+          </li>
+          <li onclick="toggleQuest(this)">
+            <span class="box">✅</span>
+            <span>Volleyball at hyde park<br>
+              <span style="color:#bbb;font-size:.82rem">(ik you dont play, but yeah)</span>
+            </span>
+          </li>
+           <li onclick="toggleQuest(this)">
+            <span class="box">✅</span>
+            <span>Your decision...<br>
+              <span style="color:#bbb;font-size:.82rem">(i'd be down to see what ya have in store frfr)</span>
+            </span>
+                           <li style="opacity:.55; cursor:not-allowed; pointer-events:none;">
+                        <span class="box">🔒</span>
+                  <span>Watching Fireworks on the 4th of July together<br>
+               <span style="color:#bbb;font-size:.82rem">(locked for now.. coming soon doee)</span>
+            </span>
+          </li>
+
+<li style="opacity:.55; cursor:not-allowed; pointer-events:none;">
+  <span class="box">🔒</span>
+  <span>Arcade Date?<br>
+    <span style="color:#bbb;font-size:.82rem">(locked for now... maybe eventually doeee )</span>
+  </span>
+</li>
+          </li>
+          <li onclick="toggleQuest(this)">
+            <span class="box">✅</span>
+            <span>Walking around the niagara falls frrr / Riding bikes </span>
+               <span style="color:#bbb;font-size:.82rem">(itll be hard since i dont have a bike yet)</span>
+            <span>
+          </li>
+        </ul>
+
+        <div class="picker-section">
+          <p style="font-size:.9rem;color:#777;margin-bottom:1rem;">Pick a date and time.</p>
+          <div>
+            <label>Date</label>
+            <input type="date" id="pick-date">
+          </div>
+          <div style="margin-top:.5rem">
+            <label>Time</label>
+            <input type="time" id="pick-time">
+          </div>
+          <button class="submit-btn" onclick="submitQuest()">Take a screenshot btw</button>
+        </div>
+      </div>
+
+      <div id="no-response" style="display:none">
+        <p style="font-size:1.3rem;color:#888;">damn it... </p>
+        <p style="color:#aaa;margin-top:.7rem;">maybe another time we can... just let me know</p>
+      </div>
+
+      <div id="success-response" style="display:none" class="success-msg">
+        <strong>Thank you....</strong>
+        PLEASEEE again... Take a screenshot of it and circle your answers "YES, MAYBE, NO" please, and send it to me via snapchatt or anything else i guess weirdo... We'll talk about it, and when it happens and we figure it out, I'll see you then hopefully :)
+        I'll add more things to this website as it goes on...
+      </div>
+
+    </div>
+  </section>
+
+  <section id="pictures">
+    <h2>some moments or whatever we did togetherr like roblox (took forever to find some.. and by some i meant three lmaooo) ONLY IF YOU WANT TOOO... send some photos to me that you have of us for me to add </h2>
+    <div class="pics-grid" id="pics-grid">
+      <div class="pic-slot"><img src="photo1.png" alt=""></div>
+      <div class="pic-slot"><img src="photo2.png" alt=""></div>
+      <div class="pic-slot"><img src="photo3.png" alt=""></div>
+      <div class="pic-slot"><img src="photo4.png" alt=""></div>
+      <div class="pic-slot"><img src="photo5.png" alt=""></div>
+      <div class="pic-slot"><img src="photo6.png" alt=""></div>
+    </div>
+    <p class="pics-note">more to come... maybe eventually... ya never knoww</p>
+  </section>
+
+  <section id="more">
+    <p id="more-text">this doesn't work rn atm... by "dosen't work" i meant that we didnt even code anything in for that yet lmaooo. and this is ONLY because i got lazy and tired. HOWEVER, Be on the lookout for a QUIZ section </p>
+  </section>              
+
+  <section id="schedule">
+    <h2>our schedule so far yuhhhh 🗓️</h2>
+    <p class="sched-note">keeping track of it</p>
+
+    <div class="date-card">
+      <div class="dc-day">day 01</div>
+      <div class="dc-activity">Movie Date 🎬</div>
+      <div class="dc-when">July 1st &nbsp;-&nbsp; 5:55 PM</div>
+      <span class="dc-status confirmed">✓ &nbsp;confirmed</span>
+    </div>
+
+    <div class="date-card locked">
+      <div class="dc-day">day 02</div>
+      <div class="dc-activity">???</div>
+      <div class="dc-when">coming soon... hopefully</div>
+      <span class="dc-status pending">🔒 &nbsp;stay tuned</span>
+    </div>
+  </section>
+
+  <section id="future">
+    <h2 style="color:#c9a0e8;">LIVE EVENT (pretty much) ❤️ our future</h2>
+    <p style="color:#aaa;font-size:1rem;line-height:2;letter-spacing:0.04em;">
+      coming soon when it's ready ofc...<br>
+      <span style="font-size:0.82rem;color:#ccc;font-style:italic;">(stay tuned. it'll be worth it frfr.)</span>
+    </p>
+  </section>
+
+</div>
+
+<div id="secret-overlay">
+  <div id="secret-blur-bg"></div>
+  <div id="secret-text-wrap">
+    <p id="secret-line" class="secret-line"></p>
+  </div>
+</div>
+
+<div id="bottom-player">
+  <img src="disc.gif" style="width:36px;height:36px;border-radius:50%;object-fit:cover;opacity:0.85;flex-shrink:0;">
+  <div class="bp-song">
+    now playing<span id="bp-song-name">Breathe Deeper</span>
+  </div>
+<button class="bp-btn" onclick="prevSong()"><img src="prev.png" style="width:24px;height:24px"></button>
+<button class="bp-play" id="bp-play-btn" onclick="togglePlay()"><img id="play-icon" src="play.png" style="width:24px;height:24px"></button>
+<button class="bp-btn" onclick="nextSong()"><img src="next.png" style="width:24px;height:24px"></button>
+  <div class="bp-vol">
+    <span style="font-size:.8rem;color:#bbb">&#128264;</span>
+    <input type="range" min="0" max="100" value="70" oninput="setVol(this.value)">
+  </div>
+</div>
+
+<div id="compliment-bar"><span id="compliment-text"></span></div>
+<div id="idle-msg">ya still here? i really hope you're smiling rn.</div>
+
+<div id="exit-modal">
+  <div id="exit-inner">
+    <p id="exit-title">wait, are you sure you wanna go?</p>
+    <p id="exit-sub">you don't have to leave just yet...</p>
+    <button id="exit-confirm-btn" onclick="closeExitModal()">
+      <span id="exit-btn-text">i'll stay :)</span>
+    </button>
+  </div>
+</div>
+
+
+<script>
+
+const symbols = ['im the goat','please dont kill me','im glad i met ya','hopefully you said yes','airibella is NOT an alpha','seriously though, im really glad i met ya','you suck bunss at zelda totk','coding this was a pain in the ass','this was gonna be a flower, but im lazy','If you think I couldnt hold my own, believe me, I can','Believe me, I can, believe me, I can'];
+const floatContainer = document.getElementById('floaters');
+
+for (let i = 0; i < 22; i++) {
+  const el = document.createElement('div');
+  el.className = 'floater';
+  el.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+
+  el.style.left              = Math.random() * 100 + 'vw';
+  el.style.fontSize          = (12 + Math.random() * 13) + 'px';
+  el.style.animationDuration = (15 + Math.random() * 23) + 's';
+  el.style.animationDelay   = (Math.random() * 18) + 's';
+  el.style.color             = ['#d9b8ff','#b8d4ff','#ffb8d9','#b8ffd9','#ffe8b8'][Math.floor(Math.random() * 8)];
+  floatContainer.appendChild(el);
+}
+
+
+function enterSite() {
+  const intro = document.getElementById('intro');
+  const site  = document.getElementById('main-site');
+  const bg    = document.getElementById('gradient-bg');
+  const loadMsg = document.getElementById('loading-text');
+
+  intro.style.opacity = '0';
+
+  setTimeout(() => {
+    intro.style.display = 'none';
+
+    
+    loadMsg.style.opacity = '1';
+
+    setTimeout(() => {
+      loadMsg.style.opacity = '0';
+      setTimeout(() => {
+        bg.style.opacity    = '0.18';
+        site.style.opacity  = '1';
+        showSection('dates');
+        setTimeout(() => {
+          document.getElementById('bottom-player').classList.add('visible');
+          document.getElementById('mailbox-btn').classList.add('visible');
+          document.getElementById('secret-star').classList.add('visible');
+        }, 600);
+      }, 700);
+    }, 3000);
+
+  }, 1400);
+}
+
+
+function showSection(id) {
+  const current = document.querySelector('section.active');
+  const next    = document.getElementById(id);
+
+  if (current && current !== next) {
+    current.classList.add('fade-out');
+    setTimeout(() => {
+      current.classList.remove('active', 'fade-out');
+      next.classList.add('active');
+    }, 350);
+  } else {
+    document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+    next.classList.add('active');
+  }
+
+  if (id === 'more') {
+
+  }
+}
+
+
+let selectedQuest = '';
+
+function toggleQuest(el) {
+  document.querySelectorAll('.quest-list li').forEach(li => li.classList.remove('selected'));
+  el.classList.add('selected');
+  // grab the second span, which is always the activity name
+  const spans = el.querySelectorAll('span');
+  selectedQuest = (spans[1] || spans[0]).textContent.trim();
+}
+
+function handleAnswer(ans) {
+  const ra  = document.getElementById('response-area');
+  const yes = document.getElementById('yes-response');
+  const no  = document.getElementById('no-response');
+  const suc = document.getElementById('success-response');
+
+  yes.style.display = 'none';
+  no.style.display  = 'none';
+  suc.style.display = 'none';
+  ra.classList.add('visible');
+
+  if (ans === 'yes' || ans === 'maybe') {
+    yes.style.display = 'block';
+  } else {
+    window.open('https://www.youtube.com/watch?v=7riEMfoz9Bc&list=RD7riEMfoz9Bc&start_radio=1', '_blank');
+  }
+}
+
+function submitQuest() {
+  const d = document.getElementById('pick-date').value;
+  const t = document.getElementById('pick-time').value;
+
+  if (!selectedQuest)  { alert('I MEAN... YOU GOTTA PICK SOMETHING FIRST... DUH');      return; }
+  if (!d || !t)        { alert('DUDEEE, YOU FORGOT TO PICK THE DATE AND TIME');    return; }
+
+  const body    = encodeURIComponent(`Quest: ${selectedQuest}\nDate: ${d}\nTime: ${t}`);
+  const subject = encodeURIComponent('yuhhhh, thank youuu');
+
+  document.getElementById('yes-response').style.display     = 'none';
+  document.getElementById('success-response').style.display = 'block';
+}
+
+const songs = ['Breathe Deeper', 'Ring Ring Ring', 'Good Grief', 'Start','Ethereal Connection', 'Piece Of Heaven', 'The Moment', 'Not My World', 'Oblivion', 'Private', 'Not Allowed '];
+
+const songFiles = [
+  new Audio('breathe-deeper.mp3'),
+    new Audio('ring-ring-ring.mp3'),
+      new Audio('good-grief.mp3'),
+        new Audio('start.mp3'),
+          new Audio('ethereal-connection.mp3'),
+            new Audio('piece-of-heaven.mp3'),
+             new Audio('the-moment.mp3'),
+              new Audio('not-my-world.mp3'),
+                new Audio('oblivion.mp3'),
+                  new Audio('private.mp3'),
+                    new Audio('not-allowed.mp3'),
+];
+
+let currentSong = 0;
+let playing     = false;
+let volVal      = 70;
+
+function updateSongDisplay() {
+  document.getElementById('bp-song-name').textContent = songs[currentSong];
+}
+
+function syncPlayButtons() {
+  document.getElementById('play-icon').src = playing ? 'pause.png' : 'play.png';
+}
+
+function togglePlay() {
+  playing = !playing;
+  syncPlayButtons();
+  const a = songFiles[currentSong];
+  if (a) { playing ? a.play() : a.pause(); }
+}
+
+function nextSong() {
+  if (songFiles[currentSong]) songFiles[currentSong].pause();
+  currentSong = (currentSong + 1) % songs.length;
+  updateSongDisplay();
+  changeBgTint();
+  const a = songFiles[currentSong];
+  if (playing && a) { a.volume = volVal / 100; a.play(); }
+}
+
+function prevSong() {
+  if (songFiles[currentSong]) songFiles[currentSong].pause();
+  currentSong = (currentSong - 1 + songs.length) % songs.length;
+  updateSongDisplay();
+  changeBgTint();
+  const a = songFiles[currentSong];
+  if (playing && a) { a.volume = volVal / 100; a.play(); }
+}
+
+function setVol(v) {
+  volVal = v;
+  const a = songFiles[currentSong];
+  if (a) a.volume = v / 100;
+}
+
+
+songFiles.forEach((a, i) => {
+  if (a) a.addEventListener('ended', () => nextSong());
+});
+
+
+const bgTints = [
+  'linear-gradient(135deg,#fdf6ff 0%,#f0f8ff 40%,#fff8f0 70%,#f5fff8 100%)',
+  'linear-gradient(135deg,#f0fff8 0%,#fdf6ff 40%,#fff0f8 70%,#f8f0ff 100%)',
+  'linear-gradient(135deg,#fff0f8 0%,#f0f8ff 40%,#fdfff0 70%,#f8fff0 100%)',
+];
+
+function changeBgTint() {
+  document.getElementById('gradient-bg').style.background = bgTints[currentSong % bgTints.length];
+}
+
+
+const compliments = [
+  'i guesss you have great music taste.',
+  "i'd probably beat you at zelda... (im KIDDING dude dw...)",
+  'still one of the sweetest people i know.',
+  'breathe deeper is a good favorite song. i loved it as you can tell in the video',
+  'you somehow make everything interesting, idk how you do it.',
+  'they call me the goat for a reason btww.',
+];
+
+let ci = 0;
+const ctxt = document.getElementById('compliment-text');
+ctxt.textContent = compliments[ci];
+
+setInterval(() => {
+  ctxt.style.opacity = '0';
+  setTimeout(() => {
+    ci = (ci + 1) % compliments.length;
+    ctxt.textContent  = compliments[ci];
+    ctxt.style.opacity = '1';
+  }, 900);
+}, 7000);
+
+let secretUsed = false;
+
+const secretLines = [
+  "hey.",
+  "you found that little secret star some howw (it was obv ngl)",
+  "soooo. just because you found it, i guess i'll tell you something...",
+  "i could've spent this time doing literally anything else.",
+  "playing games.\n\nsleeping (big on that one i stayed up till 6am doing parts of this).\n\ndestroying ya in zelda (in my dreams ofc, that'll never happen).",
+  "however, i wanted to make this for you instead.",
+  "because i thought you'd like it, and it might even make you smile after TODAY OFC, or yesterday, or whatever day you we're not feeling ya bestt yknowww!",
+  "and honestly...",
+  "that was enough of a reason, and that was all the reason i needed.",
+  "thanks for being you, aries ❤️",
+  "and NEVERRR... EVERRR forget how much happiness and light ya bring to the people around you, Airibella :)",
+];
+
+const secretPauses = [1400, 1600, 1600, 1800, 2400, 1500, 8000, 1400, 8000, 8000, 8000];
+
+function triggerSecret() {
+  if (secretUsed) return;
+  secretUsed = true;
+
+  const star    = document.getElementById('secret-star');
+  const overlay = document.getElementById('secret-overlay');
+  const line    = document.getElementById('secret-line');
+  const audio   = songFiles[currentSong];
+
+  star.classList.add('used');
+
+  if (audio && playing) {
+    let v = audio.volume;
+    const fadeDown = setInterval(() => {
+      v = Math.max(0.20, v - 0.04);
+      audio.volume = v;
+      if (v <= 0.20) clearInterval(fadeDown);
+    }, 80);
+  }
+
+  overlay.classList.add('active');
+
+  let i = 0;
+
+  function showNext() {
+    if (i >= secretLines.length) {
+      line.classList.remove('visible');
+      setTimeout(() => {
+        overlay.classList.remove('active');
+        if (audio && playing) {
+          let v = audio.volume;
+          const fadeUp = setInterval(() => {
+            v = Math.min(volVal / 100, v + 0.03);
+            audio.volume = v;
+            if (v >= volVal / 100) clearInterval(fadeUp);
+          }, 80);
+        }
+        showSection('dates');
+      }, 1200);
+      return;
+    }
+
+    line.classList.remove('visible');
+    setTimeout(() => {
+      line.textContent = secretLines[i];
+      line.classList.add('visible');
+      const pause = secretPauses[i] || 1600;
+      i++;
+      setTimeout(showNext, pause);
+    }, 700);
+  }
+
+  setTimeout(showNext, 900);
+}
+const _origTitle = document.title;
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) {
+    document.title = "damn it... come back..";
+  } else {
+    document.title = "she's back huzzah!!";
+    setTimeout(() => { document.title = _origTitle; }, 3000);
+  }
+});
+
+let _idleTimer;
+let _idleActive = false;
+function _resetIdle() {
+  clearTimeout(_idleTimer);
+  if (_idleActive) return;
+  _idleTimer = setTimeout(() => {
+    _idleActive = true;
+    const m = document.getElementById('idle-msg');
+    if (m) {
+      m.style.opacity = '1';
+      setTimeout(() => {
+        m.style.opacity = '0';
+        setTimeout(() => { _idleActive = false; }, 1600);
+      }, 5000);
+    }
+  }, 2 * 60 * 1000);
+}
+['mousemove','keydown','click','scroll','touchstart'].forEach(ev => {
+  document.addEventListener(ev, _resetIdle, { passive: true });
+});
+_resetIdle();
+
+let exitAttempts = 0;
+let exitEnabled  = true;
+
+const exitData = [
+  {
+    title : "wait, are you sure you wanna go?",
+    sub   : "you don't have to leave just yet yknoww?",
+    btn   : "fine, i'll stay :)"
+  },
+  {
+    title : "you can't leave this website...",
+    sub   : "not allowed (get it). sorry.",
+    btn   : "okay fine..."
+  },
+  {
+    title : "i'm kidding lol.... go aheadd :) (i guesss)",
+    sub   : "come back soon though fr.",
+    btn   : "alright, bye"
+  }
+];
+
+function showExitModal() {
+  const data = exitData[exitAttempts];
+  if (!data) return;
+  document.getElementById('exit-title').textContent    = data.title;
+  document.getElementById('exit-sub').textContent      = data.sub;
+  document.getElementById('exit-btn-text').textContent = data.btn;
+  document.getElementById('exit-modal').classList.add('open');
+}
+
+function closeExitModal() {
+  document.getElementById('exit-modal').classList.remove('open');
+  exitAttempts++;
+  if (exitAttempts >= exitData.length) {
+    exitEnabled = false; 
+  }
+}
+
+document.addEventListener('mouseleave', function(e) {
+  if (e.clientY <= 4 && exitEnabled) {
+    // Only fire after the intro/loading screen is gone
+    const intro = document.getElementById('intro');
+    if (intro && intro.style.display !== 'none') return;
+    showExitModal();
+  }
+});
+</script>
+
+<div id="mailbox-btn" onclick="toggleMailbox()">
+  <img src="mailbox.png" alt="mailbox" id="mailbox-icon">
+  <span id="mailbox-badge"></span>
+</div>
+
+<div id="mailbox-popup">
+  <div id="mailbox-header">
+    <span>notes for you to read (i hope you read them🤍)</span>
+    <button onclick="toggleMailbox()" id="mailbox-close">✕</button>
+  </div>
+  <div id="mailbox-notes">
+
+
+    <div class="note">
+      <div class="note-label">To Aries, From Dee</div>
+      <div class="note-text">soooo, did you answer the question yettt or? </div>
+    </div>
+
+    <div class="note">
+      <div class="note-label">btw</div>
+      <div class="note-text">and btw, i carried you AND veah in fortnite. just saying...</div>
+    </div>
+
+  </div>
+</div>
+
+<style>
+  #mailbox-btn {
+    position: fixed; bottom: 5.5rem; right: 1.5rem;
+    z-index: 300; cursor: pointer;
+    width: 52px; height: 52px;
+    display: none; 
+    align-items: center; justify-content: center;
+  }
+  #mailbox-btn.visible { display: flex; }
+  #mailbox-icon { width: 100%; height: 100%; object-fit: contain; }
+
+  #mailbox-badge {
+    position: absolute; top: -4px; right: -4px;
+    width: 10px; height: 10px;
+    background: #e06060; border-radius: 50%;
+    display: block;
+  }
+
+  #mailbox-popup {
+    position: fixed; bottom: 9.5rem; right: 1.5rem;
+    z-index: 299;
+    width: min(320px, 88vw);
+    background: #fafaf8;
+    border: 0.5px solid #e8e8e4;
+    border-radius: 14px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+  #mailbox-popup.open {
+    display: flex;
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  #mailbox-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0.85rem 1.1rem;
+    border-bottom: 0.5px solid #eeede8;
+    font-size: 0.8rem; color: #aaa; letter-spacing: 0.05em;
+  }
+  #mailbox-close {
+    background-image: url('button.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    border: none; color: #888;
+    cursor: pointer; font-size: 0.75rem;
+    padding: 0.2rem 0.7rem;
+    font-family: inherit;
+    transition: opacity 0.15s;
+  }
+  #mailbox-close:hover { opacity: 0.7; }
+
+  #mailbox-notes {
+    display: flex; flex-direction: column; gap: 0;
+    max-height: 280px; overflow-y: auto;
+    padding: 0.5rem 0;
+  }
+
+  .note {
+    padding: 0.9rem 1.1rem;
+    border-bottom: 0.5px solid #f0efea;
+    transition: background 0.15s;
+  }
+  .note:last-child { border-bottom: none; }
+  .note:hover { background: #f5f4f0; }
+
+  .note-label {
+    font-size: 0.72rem; color: #bbb;
+    letter-spacing: 0.06em; margin-bottom: 0.35rem;
+  }
+  .note-text {
+    font-size: 0.92rem; color: #333;
+    line-height: 1.5;
+  }
+</style>
+
+<script>
+  function toggleMailbox() {
+    const popup = document.getElementById('mailbox-popup');
+    if (popup.classList.contains('open')) {
+      popup.style.opacity = '0';
+      popup.style.transform = 'translateY(10px)';
+      setTimeout(() => { popup.classList.remove('open'); }, 250);
+    } else {
+      popup.classList.add('open');
+      requestAnimationFrame(() => {
+        popup.style.opacity = '1';
+        popup.style.transform = 'translateY(0)';
+      });
+      document.getElementById('mailbox-badge').style.display = 'none';
+    }
+  }
+</script>
+
+</body>
+</html>
