@@ -16,7 +16,7 @@
 
   #gradient-bg {
     position: fixed; inset: 0; z-index: 0;
-    background: linear-gradient(135deg, #fdf6ff 0%, #f0f8ff 40%, #fff8f0 70%, #f5fff8 100%);
+    background: #ffffff;
     background-size: 400% 400%;
     animation: gradMove 18s ease infinite;
     opacity: 0;
@@ -461,9 +461,314 @@
     white-space: pre-line;
   }
   .secret-line.visible { opacity: 1; }
+
+#custom-intro-overlay {
+  position: fixed; inset: 0; z-index: 1000;
+  background: radial-gradient(ellipse at center, #0a0a0f 0%, #000 80%);
+  display: flex; align-items: center; justify-content: center;
+  transition: opacity 1.2s cubic-bezier(.55,.05,.45,.95);
+  cursor: pointer; overflow: hidden;
+}
+#custom-intro-overlay.fadeout { opacity: 0; pointer-events: none; }
+
+#intro-grain {
+  position: absolute; inset: -50%;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.6 0'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.5'/></svg>");
+  opacity: 0.08; pointer-events: none;
+  animation: grainShift 0.6s steps(3) infinite;
+  mix-blend-mode: screen;
+}
+@keyframes grainShift {
+  0%   { transform: translate(0,0); }
+  33%  { transform: translate(-3%, 2%); }
+  66%  { transform: translate(2%, -3%); }
+  100% { transform: translate(0,0); }
+}
+
+
+#intro-vignette {
+  position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.55) 75%, rgba(0,0,0,0.95) 100%);
+  z-index: 2;
+}
+
+#intro-glow {
+  position: absolute; top: 50%; left: 50%;
+  width: 70vmin; height: 70vmin;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(180,140,255,0.18) 0%, rgba(140,180,255,0.08) 40%, transparent 70%);
+  filter: blur(40px);
+  opacity: 0; transition: opacity 2.5s ease;
+  z-index: 1; pointer-events: none;
+}
+#custom-intro-overlay.started #intro-glow { opacity: 1; animation: glowPulse 4s ease-in-out infinite; }
+@keyframes glowPulse {
+  0%,100% { transform: translate(-50%,-50%) scale(1);   opacity: 0.7; }
+  50%     { transform: translate(-50%,-50%) scale(1.08); opacity: 1; }
+}
+
+#custom-intro-image {
+  position: relative; z-index: 3;
+  max-width: 78%; max-height: 78%;
+  opacity: 0;
+  transform: scale(1.08);
+  filter: brightness(0.85) contrast(1.05) saturate(1.1);
+  transition: opacity 2.2s ease, transform 8s ease-out, filter 2s ease;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04);
+  will-change: transform, opacity, filter;
+}
+#custom-intro-overlay.revealed #custom-intro-image {
+  opacity: 1; transform: scale(1); filter: brightness(1) contrast(1.05) saturate(1.1);
+}
+#custom-intro-overlay.started #custom-intro-image {
+  animation: kenBurns 18s ease-out forwards;
+}
+@keyframes kenBurns {
+  from { transform: scale(1); }
+  to   { transform: scale(1.06); }
+}
+
+#intro-prompt {
+  position: absolute; bottom: 8%; left: 50%;
+  transform: translateX(-50%);
+  z-index: 4;
+  color: rgba(255,255,255,0.85);
+  font-family: 'Calibri', serif; 
+  font-size: 0.85rem; letter-spacing: 0.4em; text-transform: uppercase;
+  text-align: center;
+  opacity: 0; transition: opacity 1.5s ease 1.8s;
+  pointer-events: none;
+  text-shadow: 0 0 18px rgba(180,140,255,0.6);
+}
+#custom-intro-overlay.revealed #intro-prompt { opacity: 1; }
+#intro-prompt .triangle {
+  display: inline-block; margin-right: 0.7em;
+  font-size: 0.75em; transform: translateY(-1px);
+}
+#intro-prompt .blink { display: inline-block; }
+#custom-intro-overlay.started #intro-prompt {
+  opacity: 0; transition: opacity 0.6s ease;
+}
+
+#intro-brand {
+  position: absolute; top: 1.4rem; left: 1.6rem; z-index: 4;
+  color: rgba(255,255,255,0.4);
+  font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase;
+  font-family: 'Calibri', serif; 
+  opacity: 0; transition: opacity 1.5s ease 2.2s;
+  pointer-events: none;
+}
+#custom-intro-overlay.revealed #intro-brand { opacity: 1; }
+
+#intro-nowplaying {
+  position: absolute; bottom: 1.4rem; right: 1.6rem; z-index: 4;
+  color: rgba(255,255,255,0.55);
+  font-size: 0.7rem; letter-spacing: 0.18em;
+  display: flex; align-items: center; gap: 0.5rem;
+  opacity: 0; transition: opacity 1s ease 0.4s;
+  pointer-events: none;
+}
+#custom-intro-overlay.started #intro-nowplaying { opacity: 1; }
+#intro-nowplaying .bars { display: inline-flex; gap: 2px; align-items: flex-end; height: 12px; }
+#intro-nowplaying .bars span {
+  display: block; width: 2px; background: rgba(200,170,255,0.85);
+  animation: eqBar 0.9s ease-in-out infinite;
+}
+#intro-nowplaying .bars span:nth-child(1) { height: 60%; animation-delay: 0s; }
+#intro-nowplaying .bars span:nth-child(2) { height: 100%; animation-delay: 0.15s; }
+#intro-nowplaying .bars span:nth-child(3) { height: 40%; animation-delay: 0.3s; }
+#intro-nowplaying .bars span:nth-child(4) { height: 80%; animation-delay: 0.45s; }
+@keyframes eqBar {
+  0%,100% { transform: scaleY(0.3); }
+  50%     { transform: scaleY(1); }
+}
+
+#intro-scanlines {
+  position: absolute; inset: 0; z-index: 5; pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255,255,255,0.012) 0px,
+    rgba(255,255,255,0.012) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  opacity: 0.6;
+}
+
+#intro-progress {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 2px; background: rgba(255,255,255,0.08); z-index: 6;
+}
+#intro-progress-bar {
+  height: 100%; width: 0%;
+  background: linear-gradient(90deg, #b88eff, #88c8ff, #ffd8a8);
+  box-shadow: 0 0 12px rgba(184,142,255,0.7);
+  transition: width 0.2s linear;
+}
+
+#settings-btn {
+  position: fixed; top: 1.1rem; left: 1.4rem; z-index: 200;
+  font-size: 1.25rem; color: #aaa; cursor: pointer;
+  opacity: 0; transition: opacity 0.8s ease, transform 0.4s ease, color 0.3s ease;
+  user-select: none; line-height: 1;
+}
+#settings-btn.visible { opacity: 1; }
+#settings-btn:hover { color: #555; transform: rotate(60deg); }
+
+#settings-panel {
+  position: fixed; top: 3rem; left: 1.4rem; z-index: 250;
+  background: rgba(250,250,248,0.97);
+  border: 0.5px solid #e8e8e4; border-radius: 14px;
+  padding: 1.2rem 1.4rem; min-width: 200px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+  display: none; flex-direction: column; gap: 0.85rem;
+  opacity: 0; transform: translateY(-6px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+#settings-panel.open { display: flex; opacity: 1; transform: translateY(0); }
+#settings-panel h4 {
+  font-size: 0.7rem; color: #aaa; letter-spacing: 0.18em;
+  text-transform: uppercase; font-weight: 400;
+}
+#settings-panel .setting-row {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 1rem; font-size: 0.88rem; color: #555;
+}
+.toggle {
+  position: relative; width: 38px; height: 20px;
+  background: #ddd; border-radius: 20px; cursor: pointer;
+  transition: background 0.25s ease;
+}
+.toggle::after {
+  content: ''; position: absolute; top: 2px; left: 2px;
+  width: 16px; height: 16px; background: #fff; border-radius: 50%;
+  transition: transform 0.25s ease; box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+.toggle.on { background: #b88eff; }
+.toggle.on::after { transform: translateX(18px); }
+
+#quiz { gap: 1.5rem; }
+.quiz-container {
+  width: 100%; max-width: 460px;
+  display: flex; flex-direction: column; gap: 1.4rem;
+}
+.quiz-q {
+  background: rgba(255,255,255,0.55);
+  border: 0.5px solid #e8e8e4; border-radius: 14px;
+  padding: 1.4rem 1.6rem; text-align: left;
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+.quiz-q:hover { box-shadow: 0 6px 24px rgba(180,160,220,0.12); }
+.quiz-text { font-size: 1rem; color: #333; margin-bottom: 1rem; }
+.quiz-opts { display: flex; flex-direction: column; gap: 0.5rem; }
+.quiz-opts button {
+  background: transparent; border: 0.5px solid #ddd; border-radius: 10px;
+  padding: 0.7rem 1rem; font-family: inherit; font-size: 0.92rem;
+  color: #555; cursor: pointer; transition: all 0.2s ease; text-align: left;
+}
+.quiz-opts button:hover:not(:disabled) {
+  background: rgba(180,140,255,0.08); border-color: #c8a8ff; color: #333;
+}
+.quiz-opts button.right { background: rgba(180,255,200,0.25); border-color: #88ddaa; color: #2a7a4a; }
+.quiz-opts button.wrong { background: rgba(255,180,180,0.22); border-color: #ddaaaa; color: #aa4444; }
+.quiz-opts button:disabled { cursor: default; }
+.quiz-feedback { font-size: 0.82rem; color: #888; margin-top: 0.7rem; min-height: 1em; }
+
+/*dark mode shit*/
+body.dark { background: #0f0f12; color: #e8e8ea; }
+body.dark #gradient-bg { background: #0f0f12 !important; }
+body.dark #intro { background: #0f0f12; color: #e8e8ea; }
+body.dark #intro h1 { color: #f0f0f0; }
+body.dark #intro p { color: #999; }
+body.dark #intro p em { color: #777; }
+body.dark #main-site { color: #e8e8ea; }
+body.dark nav a { color: #aaa; }
+body.dark nav a:hover { color: #fff; }
+body.dark h2 { color: #f0f0f0; }
+body.dark .choice-btn { color: #ccc; }
+body.dark .quest-list li { color: #bbb; }
+body.dark .quest-list li .box { border-color: #555; color: #aaa; }
+body.dark .quest-list li.selected .box { border-color: #888; background: #888; color: #fff; }
+body.dark .pics-grid .pic-slot { background: #1a1a1f; border-color: #2a2a2f; }
+body.dark .pics-note { color: #666; }
+body.dark #more-text { color: #666; }
+body.dark .date-card { background: rgba(30,30,35,0.6); border-color: #2a2a2f; }
+body.dark .date-card:hover { box-shadow: 0 6px 24px rgba(140,120,180,0.15); }
+body.dark .dc-activity { color: #eee; }
+body.dark .dc-when { color: #888; }
+body.dark .dc-day { color: #666; }
+body.dark .dc-status.pending { background: rgba(180,140,255,0.12); color: #b8a0e0; border-color: rgba(180,140,255,0.3); }
+body.dark .player-card { background: rgba(30,30,35,0.6); border-color: #2a2a2f; }
+body.dark .player-card .label { color: #777; }
+body.dark .player-card .song-name { color: #eee; }
+body.dark #bottom-player { background: rgba(15,15,18,0.92); border-top-color: #2a2a2f; }
+body.dark #bottom-player .bp-song { color: #888; }
+body.dark #bottom-player .bp-song span { color: #ddd; }
+body.dark #compliment-bar { color: #888; }
+body.dark #idle-msg { color: #b8a0e0; }
+body.dark #exit-inner { background: rgba(20,20,25,0.97); border-color: #2a2a2f; box-shadow: 0 12px 40px rgba(0,0,0,0.5); }
+body.dark #exit-title { color: #eee; }
+body.dark #exit-sub { color: #777; }
+body.dark #exit-confirm-btn { color: #ccc; }
+body.dark #secret-blur-bg { background: rgba(15,15,18,0.7); }
+body.dark #secret-overlay.active #secret-blur-bg { background: rgba(15,15,18,0.85); backdrop-filter: blur(18px); }
+body.dark .secret-line { color: #d8c8e8; }
+body.dark .picker-section label { color: #888; }
+body.dark .picker-section input[type="date"],
+body.dark .picker-section input[type="time"] { color: #ccc; }
+body.dark .submit-btn { color: #ccc; }
+body.dark #loading-msg span { color: #888; }
+body.dark .success-msg { color: #aaa; }
+body.dark .success-msg strong { color: #eee; }
+body.dark #response-area h3 { color: #eee; }
+body.dark #response-area p { color: #888 !important; }
+body.dark #mailbox-popup { background: #1a1a1f; border-color: #2a2a2f; box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
+body.dark #mailbox-header { border-bottom-color: #2a2a2f; color: #777; }
+body.dark #mailbox-close { color: #888; }
+body.dark .note { border-bottom-color: #2a2a2f; }
+body.dark .note:hover { background: #222227; }
+body.dark .note-label { color: #777; }
+body.dark .note-text { color: #ddd; }
+body.dark #settings-btn { color: #888; }
+body.dark #settings-btn:hover { color: #fff; }
+body.dark #settings-panel { background: rgba(20,20,25,0.97); border-color: #2a2a2f; box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
+body.dark #settings-panel h4 { color: #888; }
+body.dark #settings-panel .setting-row { color: #ccc; }
+body.dark .toggle { background: #444; }
+body.dark .toggle.on { background: #b88eff; }
+body.dark .quiz-q { background: rgba(30,30,35,0.6); border-color: #2a2a2f; }
+body.dark .quiz-text { color: #eee; }
+body.dark .quiz-opts button { border-color: #2a2a2f; color: #aaa; }
+body.dark .quiz-opts button:hover:not(:disabled) { background: rgba(180,140,255,0.12); border-color: #b88eff; color: #fff; }
+body.dark .quiz-opts button.right { background: rgba(120,200,140,0.15); border-color: #66bb88; color: #88ddaa; }
+body.dark .quiz-opts button.wrong { background: rgba(200,120,120,0.15); border-color: #bb6666; color: #dd8888; }
+body.dark .quiz-feedback { color: #888; }
+body.dark section#quiz > p { color: #666 !important; }
+body.dark section#future > p { color: #888 !important; }
+body.dark section#future > p span { color: #666 !important; }
+
 </style>
 </head>
 <body>
+
+
+<div id="custom-intro-overlay">
+  <div id="intro-grain"></div>
+  <div id="intro-scanlines"></div>
+  <div id="intro-glow"></div>
+  <img id="custom-intro-image" src="intropart.png" alt="">
+  <div id="intro-vignette"></div>
+  <div id="intro-brand">D &nbsp;-&nbsp; A &nbsp;-&nbsp; 2026 (soon)</div>
+  <div id="intro-prompt">
+    <span class="triangle"><span><span class="blink">click anywhere to begin aries</span>
+  </div>
+  <div id="intro-nowplaying">
+    <span>now playing · intro</span>
+  </div>
+  <div id="intro-progress"><div id="intro-progress-bar"></div></div>
+</div>
+<audio id="intro-audio" src="intro.mp3" preload="auto"></audio>
+<audio id="pop-audio" src="pop.mp3" preload="auto"></audio>
 
 <div id="gradient-bg"></div>
 <div id="floaters"></div>
@@ -481,12 +786,22 @@
 
 <div id="main-site">
   <nav>
-    <a onclick="showSection('dates')">hangouts / dates</a>
-    <a onclick="showSection('pictures')">pictures / things we did together</a>
+    <a onclick="showSection('dates')"style="color:#ffa7f3;font-style:italic;">hangouts / dates</a>
+    <a onclick="showSection('pictures')"style="color:#bea7ff;font-style:italic;">pictures / things we did together</a>
+    <a onclick="showSection('schedule')" id="schedule-nav "style="color:#c9a0e8;font-style:italic;">scheduled datess</a>
+    <a onclick="showSection('quiz')"style="color:#a0c9e8;">quiz</a>
+    <a onclick="showSection('future')"style="color:#c9a0e8;font-style:italic;">LIVE EVENT (coming soon) / our future ❤️</a>
     <a onclick="showSection('more')">more</a>
-    <a onclick="showSection('schedule')" id="schedule-nav">scheduled datess</a>
-    <a onclick="showSection('future')" style="color:#c9a0e8;font-style:italic;">LIVE EVENT (coming soon) / our future ❤️</a>
   </nav>
+
+  <div id="settings-btn" onclick="toggleSettings()" title="settings">⚙️</div> --- yes, i just added a emoji since i guess its okay to do that
+  <div id="settings-panel">
+    <h4>settings</h4>
+    <div class="setting-row">
+      <span>dark mode</span>
+      <div class="toggle" id="dark-toggle" onclick="toggleDark()"></div>
+    </div>
+  </div>
 
   <div id="secret-star" onclick="triggerSecret()" title="psst... dont click me">⭐</div>
 
@@ -591,10 +906,6 @@
     <p class="pics-note">more to come... maybe eventually... ya never knoww</p>
   </section>
 
-  <section id="more">
-    <p id="more-text">this doesn't work rn atm... by "dosen't work" i meant that we didnt even code anything in for that yet lmaooo. and this is ONLY because i got lazy and tired. HOWEVER, Be on the lookout for a QUIZ section </p>
-  </section>              
-
   <section id="schedule">
     <h2>our schedule so far yuhhhh 🗓️</h2>
     <p class="sched-note">keeping track of it</p>
@@ -614,12 +925,51 @@
     </div>
   </section>
 
+  <section id="quiz">
+    <h2>lil quiz for ya brain🧠 (this is gonna test how much you kinda know about me... however, its only three questions and easy questions for now)</h2>
+    <p style="color:#aaa;font-size:0.9rem;margin-bottom:2rem;letter-spacing:0.04em;">see how well ya know me, or yourself frfrrr</p>
+    <div class="quiz-container">
+      <div class="quiz-q" data-q="1">
+        <p class="quiz-text">what games do we play together rn?</p>
+        <div class="quiz-opts">
+          <button onclick="answerQuiz(this,'right')">fortnite / roblox</button>
+          <button onclick="answerQuiz(this,'wrong')">zelda totk</button>
+          <button onclick="answerQuiz(this,'wrong')">minecraft</button>
+        </div>
+        <p class="quiz-feedback"></p>
+      </div>
+      <div class="quiz-q" data-q="2">
+        <p class="quiz-text">what song did i have on repeat while making this? i know its not fair, but guess (hint: did you read the supported messages on the bottom</p>
+        <div class="quiz-opts">
+          <button onclick="answerQuiz(this,'wrong')">good grief</button>
+          <button onclick="answerQuiz(this,'right')">breathe deeper</button>
+          <button onclick="answerQuiz(this,'wrong')">ring ring ring</button>
+        </div>
+        <p class="quiz-feedback"></p>
+      </div>
+      <div class="quiz-q" data-q="3">
+        <p class="quiz-text">who am i making this whole thing for again? (hint: really...)</p>
+        <div class="quiz-opts">
+          <button onclick="answerQuiz(this,'wrong')">Me myself and i? (i stg if you pick this...)</button>
+          <button onclick="answerQuiz(this,'wrong')">my dog peanut (aka bean bean)</button>
+          <button onclick="answerQuiz(this,'right')">airibella, duhh</button>
+        </div>
+        <p class="quiz-feedback"></p>
+      </div>
+    </div>
+    <p id="quiz-score" style="margin-top:2rem;font-size:1.1rem;color:#888;letter-spacing:0.04em;"></p>
+  </section>
+
   <section id="future">
     <h2 style="color:#c9a0e8;">LIVE EVENT (pretty much) ❤️ our future</h2>
     <p style="color:#aaa;font-size:1rem;line-height:2;letter-spacing:0.04em;">
       coming soon when it's ready ofc...<br>
       <span style="font-size:0.82rem;color:#ccc;font-style:italic;">(stay tuned. it'll be worth it frfr.)</span>
     </p>
+  </section>
+
+  <section id="more">
+    <p id="more-text">this is just a placeholder for whatever else i add later on and honestly i got lazy and tired so thats why there aint much here lmaooo. BUTTTT, the quiz thing is live now if you wanna try that doe ✌Heres a hint for the next thing coming soon (look out for a game section 👀👀👀👀)</p>
   </section>
 
 </div>
@@ -702,6 +1052,7 @@ function enterSite() {
           document.getElementById('bottom-player').classList.add('visible');
           document.getElementById('mailbox-btn').classList.add('visible');
           document.getElementById('secret-star').classList.add('visible');
+          document.getElementById('settings-btn').classList.add('visible');
         }, 600);
       }, 700);
     }, 3000);
@@ -736,7 +1087,6 @@ let selectedQuest = '';
 function toggleQuest(el) {
   document.querySelectorAll('.quest-list li').forEach(li => li.classList.remove('selected'));
   el.classList.add('selected');
-  // grab the second span, which is always the activity name
   const spans = el.querySelectorAll('span');
   selectedQuest = (spans[1] || spans[0]).textContent.trim();
 }
@@ -839,9 +1189,9 @@ songFiles.forEach((a, i) => {
 
 
 const bgTints = [
-  'linear-gradient(135deg,#fdf6ff 0%,#f0f8ff 40%,#fff8f0 70%,#f5fff8 100%)',
-  'linear-gradient(135deg,#f0fff8 0%,#fdf6ff 40%,#fff0f8 70%,#f8f0ff 100%)',
-  'linear-gradient(135deg,#fff0f8 0%,#f0f8ff 40%,#fdfff0 70%,#f8fff0 100%)',
+  '#ffffff',
+  '#ffffff',
+  '#ffffff',
 ];
 
 function changeBgTint() {
@@ -1015,12 +1365,84 @@ function closeExitModal() {
 
 document.addEventListener('mouseleave', function(e) {
   if (e.clientY <= 4 && exitEnabled) {
-    // Only fire after the intro/loading screen is gone
     const intro = document.getElementById('intro');
     if (intro && intro.style.display !== 'none') return;
     showExitModal();
   }
 });
+
+function toggleSettings() {
+  const p = document.getElementById('settings-panel');
+  p.classList.toggle('open');
+}
+
+function toggleDark() {
+  const t = document.body;
+  const tog = document.getElementById('dark-toggle');
+  t.classList.toggle('dark');
+  tog.classList.toggle('on');
+  try {
+    localStorage.setItem('aries_dark', t.classList.contains('dark') ? '1' : '0');
+  } catch (e) {}
+}
+
+document.addEventListener('click', function(e) {
+  const panel = document.getElementById('settings-panel');
+  const btn   = document.getElementById('settings-btn');
+  if (panel && panel.classList.contains('open') &&
+      !panel.contains(e.target) && e.target !== btn) {
+    panel.classList.remove('open');
+  }
+});
+
+try {
+  if (localStorage.getItem('aries_dark') === '1') {
+    document.body.classList.add('dark');
+    window.addEventListener('DOMContentLoaded', () => {
+      const tog = document.getElementById('dark-toggle');
+      if (tog) tog.classList.add('on');
+    });
+  }
+} catch (e) {}
+
+let quizScore = 0;
+let quizAnswered = 0;
+const totalQuiz = 3;
+
+function answerQuiz(btn, type) {
+  const q = btn.closest('.quiz-q');
+  if (q.classList.contains('answered')) return;
+  q.classList.add('answered');
+  const buttons = q.querySelectorAll('button');
+  buttons.forEach(b => { b.disabled = true; });
+  btn.classList.add(type);
+
+  const fb = q.querySelector('.quiz-feedback');
+  if (type === 'right') {
+    quizScore++;
+    fb.textContent = 'yessirr ✓';
+    fb.style.color = '#5aa877';
+  } else {
+    fb.textContent = 'nahh ✗';
+    fb.style.color = '#bb6666';
+    buttons.forEach(b => {
+      if (b.getAttribute('onclick') && b.getAttribute('onclick').indexOf("'right'") !== -1) {
+        b.classList.add('right');
+      }
+    });
+  }
+  quizAnswered++;
+  if (quizAnswered === totalQuiz) {
+    const msg = quizScore === 3
+      ? 'okayyyy wowww, you actually know me (it was easy doe) :)... 3 / 3 '
+      : quizScore === 2
+        ? 'you should know more, but... good job i guess... 2 / 3'
+        : quizScore === 1
+          ? 'dude... cmon now. 1 / 3'
+          : '0 / 3 ... text me, we gotta talk...';
+    document.getElementById('quiz-score').textContent = msg;
+  }
+}
 </script>
 
 <div id="mailbox-btn" onclick="toggleMailbox()">
@@ -1147,6 +1569,89 @@ document.addEventListener('mouseleave', function(e) {
       document.getElementById('mailbox-badge').style.display = 'none';
     }
   }
+</script>
+
+
+<script>
+window.addEventListener('load', () => {
+  const overlay = document.getElementById('custom-intro-overlay');
+  const img     = document.getElementById('custom-intro-image');
+  const audio   = document.getElementById('intro-audio');
+  const progBar = document.getElementById('intro-progress-bar');
+  const intro   = document.getElementById('intro');
+
+  if (intro) intro.style.display = 'none';
+
+  setTimeout(() => overlay.classList.add('revealed'), 120);
+
+  let started = false;
+
+  function beginIntro() {
+    if (started) return;
+    started = true;
+    overlay.classList.add('started');
+
+    const dur = audio.duration && isFinite(audio.duration) ? audio.duration : 0;
+    audio.volume = 0;
+    const playPromise = audio.play();
+    if (playPromise && playPromise.catch) playPromise.catch(() => {
+      scheduleFadeout(7000);
+    });
+
+    let v = 0;
+    const fadeUp = setInterval(() => {
+      v = Math.min(1, v + 0.05);
+      audio.volume = v;
+      if (v >= 1) clearInterval(fadeUp);
+    }, 60);
+
+    audio.addEventListener('timeupdate', () => {
+      if (audio.duration && isFinite(audio.duration)) {
+        progBar.style.width = (audio.currentTime / audio.duration * 100) + '%';
+      }
+    });
+    audio.addEventListener('ended', () => scheduleFadeout(400));
+
+    if (!dur) scheduleFadeout(9000);
+  }
+
+  let fadeTimer;
+  function scheduleFadeout(delay) {
+    clearTimeout(fadeTimer);
+    fadeTimer = setTimeout(fadeoutIntro, delay);
+  }
+
+  function fadeoutIntro() {
+    let v = audio.volume;
+    const fadeDown = setInterval(() => {
+      v = Math.max(0, v - 0.06);
+      audio.volume = v;
+      if (v <= 0) { clearInterval(fadeDown); audio.pause(); }
+    }, 50);
+    setTimeout(() => {
+      progBar.style.width = '100%';
+      overlay.classList.add('fadeout');
+      if (intro) intro.style.display = 'flex';
+      setTimeout(() => { overlay.style.display = 'none'; }, 1300);
+    }, 500);
+  }
+  overlay.addEventListener('click', beginIntro, { once: true });
+  overlay.addEventListener('touchstart', beginIntro, { once: true, passive: true });
+  window.addEventListener('keydown', (e) => {
+    if (!started && (e.key === 'Enter' || e.key === ' ')) {
+      e.preventDefault();
+      beginIntro();
+    }
+  }, { once: true });
+
+  const pop = document.getElementById('pop-audio');
+  document.addEventListener('mouseover', (e) => {
+    if (e.target.closest('button,a,input,.choice-btn,li')) {
+      pop.currentTime = 0;
+      pop.play().catch(() => {});
+    }
+  });
+});
 </script>
 
 </body>
