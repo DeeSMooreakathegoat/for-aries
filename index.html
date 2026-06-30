@@ -14,7 +14,7 @@
     overflow-x: hidden;
   }
 
-  #gradient-bg {
+  #grad {
     position: fixed; inset: 0; z-index: 0;
     background: #ffffff;
     background-size: 400% 400%;
@@ -28,8 +28,8 @@
     100% { background-position: 0%   50%; }
   }
 
-  #floaters { position: fixed; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; }
-  .floater {
+  #textsthatfly { position: fixed; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; }
+  .theotherflyingtextyuh {
     position: absolute;
     font-size: 12px;
     opacity: 0;
@@ -77,7 +77,7 @@
     letter-spacing: 0.1em;
     border-radius: 0;
     transition: all 0.3s ease;
-    font-family: inherit;
+    font-family: 'Calibri', 'Candara';
   }
   #enter-btn:hover { opacity: 0.8; color: #222; }
 
@@ -97,7 +97,7 @@
     text-decoration: underline; color: #555;
     cursor: pointer; transition: color 0.2s;
     background: none; border: none;
-    font-family: inherit; font-size: inherit;
+    font-family: 'Calibri', 'Candara'; font-size: 'Calibri', 'Candara';
   }
   nav a:hover { color: #111; }
 
@@ -121,7 +121,7 @@
     background-size: 100% 100%;
     background-repeat: no-repeat;
     background-color: transparent;
-    cursor: pointer; font-family: inherit;
+    cursor: pointer; font-family: 'Calibri', 'Candara';
     color: #333; transition: all 0.25s ease; letter-spacing: 0.03em;
     min-width: 110px;
   }
@@ -199,7 +199,7 @@
   .picker-section input[type="date"],
   .picker-section input[type="time"] {
     padding: 0.6rem 1rem; border: none; border-radius: 0;
-    font-family: inherit; font-size: 0.9rem; color: #444;
+    font-family: 'Calibri', 'Candara'; font-size: 0.9rem; color: #444;
     background-image: url('button.png');
     background-size: 100% 100%;
     background-repeat: no-repeat;
@@ -213,7 +213,7 @@
     background-repeat: no-repeat;
     background-color: transparent;
     color: #555; border: none; border-radius: 0;
-    font-family: inherit; font-size: 0.9rem; cursor: pointer;
+    font-family: 'Calibri', 'Candara'; font-size: 0.9rem; cursor: pointer;
     letter-spacing: 0.08em; transition: opacity 0.25s ease;
   }
   .submit-btn:hover { opacity: 0.75; transform: translateY(-1px); }
@@ -357,7 +357,7 @@
     background-color: transparent;
     color: #555; border: none;
     padding: 0.42rem 1.3rem;
-    font-family: inherit;
+    font-family: 'Calibri', 'Candara';
   }
   .dc-status.pending {
     background: rgba(210,190,255,0.11);
@@ -406,14 +406,14 @@
     background-repeat: no-repeat;
     background-color: transparent;
     border: none; padding: 0.6rem 1.8rem;
-    font-family: inherit; font-size: 0.88rem;
+    font-family: 'Calibri', 'Candara'; font-size: 0.88rem;
     color: #555; cursor: pointer;
     letter-spacing: 0.05em;
     transition: opacity 0.2s;
   }
   #exit-confirm-btn:hover { opacity: 0.75; }
 
-  /* ── SECRET STAR ── */
+  /*da star*/
   #secret-star {
     position: fixed;
     top: 1.1rem; right: 1.4rem;
@@ -599,12 +599,6 @@
   position: absolute; bottom: 0; left: 0; right: 0;
   height: 2px; background: rgba(255,255,255,0.08); z-index: 6;
 }
-#intro-progress-bar {
-  height: 100%; width: 0%;
-  background: linear-gradient(90deg, #b88eff, #88c8ff, #ffd8a8);
-  box-shadow: 0 0 12px rgba(184,142,255,0.7);
-  transition: width 0.2s linear;
-}
 
 #settings-btn {
   position: fixed; top: 1.1rem; left: 1.4rem; z-index: 200;
@@ -663,7 +657,7 @@
 .quiz-opts { display: flex; flex-direction: column; gap: 0.5rem; }
 .quiz-opts button {
   background: transparent; border: 0.5px solid #ddd; border-radius: 10px;
-  padding: 0.7rem 1rem; font-family: inherit; font-size: 0.92rem;
+  padding: 0.7rem 1rem; font-family: 'Calibri', 'Candara'; font-size: 0.92rem;
   color: #555; cursor: pointer; transition: all 0.2s ease; text-align: left;
 }
 .quiz-opts button:hover:not(:disabled) {
@@ -676,7 +670,7 @@
 
 /*dark mode shit*/
 body.dark { background: #0f0f12; color: #e8e8ea; }
-body.dark #gradient-bg { background: #0f0f12 !important; }
+body.dark #grad { background: #0f0f12 !important; }
 body.dark #intro { background: #0f0f12; color: #e8e8ea; }
 body.dark #intro h1 { color: #f0f0f0; }
 body.dark #intro p { color: #999; }
@@ -747,6 +741,129 @@ body.dark section#quiz > p { color: #666 !important; }
 body.dark section#future > p { color: #888 !important; }
 body.dark section#future > p span { color: #666 !important; }
 
+  #escaperoom { gap: 1.6rem; }
+  .er-stage { display: none; flex-direction: column; align-items: center; width: 100%; }
+  .er-stage.active { display: flex; animation: fadeIn 0.7s ease forwards; }
+  .er-stage-label {
+    font-size: 0.68rem; color: #ccc; letter-spacing: 0.18em;
+    text-transform: uppercase; margin-bottom: 0.6rem;
+  }
+  .er-images {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px; width: 100%; max-width: 480px; margin: 1rem 0;
+  }
+  .er-images .er-img-wrap {
+    aspect-ratio: 1/1; border-radius: 12px; overflow: hidden;
+    background: #f0f0ee; border: 0.5px solid #e0e0de;
+    cursor: pointer; transition: transform 0.3s ease;
+  }
+  .er-images .er-img-wrap:hover { transform: scale(1.03); }
+  .er-images .er-img-wrap img { width: 100%; height: 100%; object-fit: cover; }
+  .er-hint-btn {
+    margin-top: 1.5rem; padding: 0.65rem 1.8rem;
+    background-image: url('button.png');
+    background-size: 100% 100%; background-repeat: no-repeat;
+    background-color: transparent; border: none;
+    font-family: 'Calibri', 'Candara'; font-size: 0.88rem; color: #555;
+    cursor: pointer; letter-spacing: 0.06em; transition: opacity 0.25s ease;
+  }
+  .er-hint-btn:hover { opacity: 0.75; }
+  .er-hint-box {
+    margin-top: 1rem; max-width: 380px; text-align: center;
+    font-size: 0.88rem; color: #999; line-height: 1.7;
+    letter-spacing: 0.03em; min-height: 1.5rem;
+  }
+  .er-hint-box p { margin-bottom: 0.5rem; }
+  .er-think-box {
+    margin-top: 2rem; max-width: 400px; text-align: center;
+    font-size: 0.95rem; color: #aaa; line-height: 2;
+    letter-spacing: 0.04em;
+  }
+  .er-code-row {
+    display: flex; gap: 10px; margin-top: 2rem; align-items: center;
+  }
+  .er-code-input {
+    width: 180px; padding: 0.7rem 1rem; text-align: center;
+    font-size: 1.3rem; letter-spacing: 0.4em;
+    font-family: 'Calibri', 'Candara'; color: #333;
+    border: 0.5px solid #ddd; border-radius: 12px;
+    background: rgba(255,255,255,0.6); outline: none;
+    transition: border-color 0.3s ease;
+  }
+  .er-code-input:focus { border-color: #bbb; }
+  .er-code-submit {
+    padding: 0.7rem 1.5rem;
+    background-image: url('button.png');
+    background-size: 100% 100%; background-repeat: no-repeat;
+    background-color: transparent; border: none;
+    font-family: 'Calibri', 'Candara'; font-size: 0.88rem; color: #555;
+    cursor: pointer; letter-spacing: 0.06em; transition: opacity 0.25s ease;
+  }
+  .er-code-submit:hover { opacity: 0.75; }
+  .er-success {
+    margin-top: 2rem; font-size: 1.3rem; color: #333;
+    letter-spacing: 0.04em; display: none;
+    animation: fadeIn 0.8s ease forwards;
+  }
+  .er-success.visible { display: block; }
+  .er-error {
+    margin-top: 0.8rem; font-size: 0.82rem; color: #cc8888;
+    letter-spacing: 0.04em; display: none;
+  }
+  .er-error.visible { display: block; }
+  .er-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: #ddd; transition: background 0.4s ease;
+  }
+  .er-dot.done { background: #b8a0e0; }
+  .er-dot.current { background: #c9a0e8; box-shadow: 0 0 8px rgba(180,140,255,0.4); }
+  .er-nav-row {
+    display: flex; gap: 1rem; margin-top: 1.5rem;
+  }
+  .er-nav-btn {
+    padding: 0.6rem 1.6rem;
+    background-image: url('button.png');
+    background-size: 100% 100%; background-repeat: no-repeat;
+    background-color: transparent; border: none;
+    font-family: 'Calibri', 'Candara'; font-size: 0.85rem; color: #555;
+    cursor: pointer; letter-spacing: 0.06em; transition: opacity 0.25s ease;
+  }
+  .er-nav-btn:hover { opacity: 0.75; }
+  .er-nav-btn:disabled { opacity: 0.3; cursor: default; }
+  /* lightbox */
+  #er-lightbox {
+    position: fixed; inset: 0; z-index: 500;
+    display: flex; align-items: center; justify-content: center;
+    pointer-events: none; opacity: 0; transition: opacity 0.3s ease;
+    background: rgba(250,250,248,0.92);
+    backdrop-filter: blur(6px);
+  }
+  #er-lightbox.open { opacity: 1; pointer-events: all; }
+  #er-lightbox img {
+    max-width: 90vw; max-height: 85vh; border-radius: 12px;
+    object-fit: contain; box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+  }
+  #er-lightbox .er-lb-close {
+    position: absolute; top: 1.5rem; right: 2rem;
+    font-size: 1.5rem; color: #aaa; cursor: pointer;
+    transition: color 0.2s; user-select: none;
+  }
+  #er-lightbox .er-lb-close:hover { color: #333; }
+  /* dark mode escape room */
+  body.dark .er-stage-label { color: #666; }
+  body.dark .er-images .er-img-wrap { background: #1a1a1f; border-color: #2a2a2f; }
+  body.dark .er-hint-box { color: #777; }
+  body.dark .er-think-box { color: #777; }
+  body.dark .er-code-input {
+    background: rgba(30,30,35,0.6); border-color: #2a2a2f; color: #eee;
+  }
+  body.dark .er-code-input:focus { border-color: #555; }
+  body.dark .er-success { color: #eee; }
+  body.dark .er-error { color: #cc8888; }
+  body.dark #er-lightbox { background: rgba(15,15,18,0.92); }
+  body.dark #er-lightbox .er-lb-close { color: #888; }
+  body.dark #er-lightbox .er-lb-close:hover { color: #fff; }
+
 </style>
 </head>
 <body>
@@ -770,8 +887,8 @@ body.dark section#future > p span { color: #666 !important; }
 <audio id="intro-audio" src="intro.mp3" preload="auto"></audio>
 <audio id="pop-audio" src="pop.mp3" preload="auto"></audio>
 
-<div id="gradient-bg"></div>
-<div id="floaters"></div>
+<div id="grad"></div>
+<div id="textsthatfly"></div>
 
 <div id="intro">
   <h1>To Airibella, From Dee.</h1>
@@ -787,6 +904,7 @@ body.dark section#future > p span { color: #666 !important; }
 <div id="main-site">
   <nav>
     <a onclick="showSection('dates')"style="color:#ffa7f3;font-style:italic;">hangouts / dates</a>
+    <a onclick="showSection('escaperoom')"style="color:#a0c9e8;font-style:italic;">a tiny escape room just for you</a>
     <a onclick="showSection('pictures')"style="color:#bea7ff;font-style:italic;">pictures / things we did together</a>
     <a onclick="showSection('schedule')" id="schedule-nav "style="color:#c9a0e8;font-style:italic;">scheduled datess</a>
     <a onclick="showSection('quiz')"style="color:#a0c9e8;">quiz</a>
@@ -820,25 +938,25 @@ body.dark section#future > p span { color: #666 !important; }
         <p style="color:#888;font-size:.9rem;margin-bottom:1.5rem;">Choose a place for our date / hangout</p>
 
         <ul class="quest-list" id="quest-list">
-          <li onclick="toggleQuest(this)">
+          <li onclick="ourdateoptions(this)">
             <span class="box">✅</span>
             <span>At the mall</span>
                <span style="color:#bbb;font-size:.82rem">(Very Recommended!)</span>
             <span>    
           </li>
-          <li onclick="toggleQuest(this)">
+          <li onclick="ourdateoptions(this)">
             <span class="box">✅</span>
             <span>Movie Date</span>
                <span style="color:#bbb;font-size:.82rem">(Very Recommended!)</span>
             <span>            
           </li>
-          <li onclick="toggleQuest(this)">
+          <li onclick="ourdateoptions(this)">
             <span class="box">✅</span>
             <span>Volleyball at hyde park<br>
               <span style="color:#bbb;font-size:.82rem">(ik you dont play, but yeah)</span>
             </span>
           </li>
-           <li onclick="toggleQuest(this)">
+           <li onclick="ourdateoptions(this)">
             <span class="box">✅</span>
             <span>Your decision...<br>
               <span style="color:#bbb;font-size:.82rem">(i'd be down to see what ya have in store frfr)</span>
@@ -857,7 +975,7 @@ body.dark section#future > p span { color: #666 !important; }
   </span>
 </li>
           </li>
-          <li onclick="toggleQuest(this)">
+          <li onclick="ourdateoptions(this)">
             <span class="box">✅</span>
             <span>Walking around the niagara falls frrr / Riding bikes </span>
                <span style="color:#bbb;font-size:.82rem">(itll be hard since i dont have a bike yet)</span>
@@ -926,33 +1044,37 @@ body.dark section#future > p span { color: #666 !important; }
   </section>
 
   <section id="quiz">
-    <h2>lil quiz for ya brain🧠 (this is gonna test how much you kinda know about me... however, its only three questions and easy questions for now)</h2>
+    <h2>lil quiz for ya brain🧠 (changed the answers to make it harder for ya)</h2>
     <p style="color:#aaa;font-size:0.9rem;margin-bottom:2rem;letter-spacing:0.04em;">see how well ya know me, or yourself frfrrr</p>
     <div class="quiz-container">
       <div class="quiz-q" data-q="1">
-        <p class="quiz-text">what games do we play together rn?</p>
+        <p class="quiz-text">Be honest... soo if you had to go back to the moment we started catching feelings for eachother, who do YOU think caught feelings first? (i know this)</p>
         <div class="quiz-opts">
-          <button onclick="answerQuiz(this,'right')">fortnite / roblox</button>
-          <button onclick="answerQuiz(this,'wrong')">zelda totk</button>
-          <button onclick="answerQuiz(this,'wrong')">minecraft</button>
+          <button onclick="answerQuiz(this,'right')">Airibella (booo)</button>
+          <button onclick="answerQuiz(this,'wrong')">Dee (yurr)</button>
+          <button onclick="answerQuiz(this,'wrong')">no one at all whatsoever ig because we just met and then boom.</button>
         </div>
         <p class="quiz-feedback"></p>
       </div>
       <div class="quiz-q" data-q="2">
-        <p class="quiz-text">what song did i have on repeat while making this? i know its not fair, but guess (hint: did you read the supported messages on the bottom</p>
+        <p class="quiz-text">sooo, think about the last time we we're playing roblox or fortnite. Who do YOUUUUUUUU Think has the higher chance to go pro and beat EVERYONE in those games </p>
         <div class="quiz-opts">
-          <button onclick="answerQuiz(this,'wrong')">good grief</button>
-          <button onclick="answerQuiz(this,'right')">breathe deeper</button>
-          <button onclick="answerQuiz(this,'wrong')">ring ring ring</button>
+          <button onclick="answerQuiz(this,'wrong')">Dee (yep thats me again)</button>
+          <button onclick="answerQuiz(this,'right')">Aries (booo again)</button>
+          <button onclick="answerQuiz(this,'wrong')">Both of uss since my name is the GOAT</button>
         </div>
         <p class="quiz-feedback"></p>
       </div>
       <div class="quiz-q" data-q="3">
-        <p class="quiz-text">who am i making this whole thing for again? (hint: really...)</p>
+        <p class="quiz-text">(PICK WHATEVER... And screenshot this answer since i wanna know frfr)nowww, think for a minute. if we could reset everything to the moment we first started talking, but you could only remember ONE thing about me, WHAT would it be</p>
         <div class="quiz-opts">
-          <button onclick="answerQuiz(this,'wrong')">Me myself and i? (i stg if you pick this...)</button>
-          <button onclick="answerQuiz(this,'wrong')">my dog peanut (aka bean bean)</button>
-          <button onclick="answerQuiz(this,'right')">airibella, duhh</button>
+          <button onclick="answerQuiz(this,'right')">The "Earlobe" incident... (don't say anything about that)</button>
+          <button onclick="answerQuiz(this,'right')">Hanging Out</button>
+          <button onclick="answerQuiz(this,'right')">Playing games with eachother</button>
+          <button onclick="answerQuiz(this,'right')">Staying on the phone for around 11 to 13 hours (i forgot.)</button>      
+          <button onclick="answerQuiz(this,'right')">Recent, Watching Deltarune with eachother (i guess voice acting?? you're very bad at it btw.. im KIDDING)</button>  
+          <button onclick="answerQuiz(this,'right')">Everythingg (Aww thats sweett)</button>  
+          <button onclick="answerQuiz(this,'right')">uhhh.. prob nothing.. (ow man.. what the fuck that kinda hurt.)</button>      
         </div>
         <p class="quiz-feedback"></p>
       </div>
@@ -968,8 +1090,62 @@ body.dark section#future > p span { color: #666 !important; }
     </p>
   </section>
 
+  <section id="escaperoom">
+    <h2>a tiny escape room just for you</h2>
+    <div class="er-stage active" id="er-stage-1">
+      <p class="er-stage-label">stage 1... da image section</p>
+      <p style="color:#aaa;font-size:0.9rem;letter-spacing:0.04em;max-width:400px;line-height:1.8;">look at the three images below. you need to find some numbers hiding in plain sight.</p>
+      <div class="er-images">
+        <div class="er-img-wrap" onclick="openErLightbox('image1.png')"><img src="image1.png" alt="image 1"></div>
+        <div class="er-img-wrap" onclick="openErLightbox('image2.png')"><img src="image2.png" alt="image 2"></div>
+        <div class="er-img-wrap" onclick="openErLightbox('image3.png')"><img src="image3.png" alt="image 3"></div>
+      </div>
+      <button class="er-hint-btn" onclick="erHint(1)">hint?</button>
+      <div class="er-hint-box" id="er-hint-1"></div>
+      <div class="er-nav-row">
+        <button class="er-nav-btn" onclick="erGoStage(2)">next →</button>
+      </div>
+    </div>
+
+    <div class="er-stage" id="er-stage-2">
+      <p class="er-stage-label">stage 2... this is just thinking lmaooo, if you have a BRAIN, you got it.</p>
+      <div class="er-think-box">
+        soooo, you got your three numbers? nice nice.<br><br>
+        now use ya chud brainnn and THINKKK... what do you do with them?<br>
+        <span style="font-size:0.82rem;color:#bbb;">(think carefully about what to keep doe. i suggest writing the numbers done on a notepad)</span>
+      </div>
+      <button class="er-hint-btn" onclick="erHint(2)">hint?</button>
+      <div class="er-hint-box" id="er-hint-2"></div>
+      <div class="er-nav-row">
+        <button class="er-nav-btn" onclick="erGoStage(1)">← back</button>
+        <button class="er-nav-btn" onclick="erGoStage(3)">next →</button>
+      </div>
+    </div>
+
+    <div class="er-stage" id="er-stage-3">
+      <p class="er-stage-label">stage 3... final</p>
+      <p style="color:#aaa;font-size:0.9rem;letter-spacing:0.04em;max-width:400px;line-height:1.8;">you're SOOOOO close. enter the 4 digit code.</p>
+      <div class="er-code-row">
+        <input type="text" class="er-code-input" id="er-code-input" maxlength="4" placeholder="_ _ _ _" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+        <button class="er-code-submit" onclick="erCheckCode()">go</button>
+      </div>
+      <div class="er-error" id="er-error">hmm thats not it... try again</div>
+      <div class="er-success" id="er-success">AYEEE YOU DID ITT BIG BRAINNN</div>
+      <button class="er-hint-btn" onclick="erHint(3)" id="er-hint-btn-3">hint?</button>
+      <div class="er-hint-box" id="er-hint-3"></div>
+      <div class="er-nav-row">
+        <button class="er-nav-btn" onclick="erGoStage(2)">← back</button>
+      </div>
+    </div>
+  </section>
+
+  <div id="er-lightbox" onclick="closeErLightbox()">
+    <span class="er-lb-close">×</span>
+    <img id="er-lb-img" src="" alt="">
+  </div>
+
   <section id="more">
-    <p id="more-text">this is just a placeholder for whatever else i add later on and honestly i got lazy and tired so thats why there aint much here lmaooo. BUTTTT, the quiz thing is live now if you wanna try that doe ✌Heres a hint for the next thing coming soon (look out for a game section 👀👀👀👀)</p>
+    <p id="more-text">this is just a placeholder for whatever else i add later on and honestly i got lazy and tired so thats why there aint much here lmaooo. PEEP THAT ESCAPE ROOM AND THE QUIZ DOE</p>
   </section>
 
 </div>
@@ -1012,11 +1188,11 @@ body.dark section#future > p span { color: #666 !important; }
 <script>
 
 const symbols = ['im the goat','please dont kill me','im glad i met ya','hopefully you said yes','airibella is NOT an alpha','seriously though, im really glad i met ya','you suck bunss at zelda totk','coding this was a pain in the ass','this was gonna be a flower, but im lazy','If you think I couldnt hold my own, believe me, I can','Believe me, I can, believe me, I can'];
-const floatContainer = document.getElementById('floaters');
+const floatContainer = document.getElementById('textsthatfly');
 
 for (let i = 0; i < 22; i++) {
   const el = document.createElement('div');
-  el.className = 'floater';
+  el.className = 'theotherflyingtextyuh';
   el.textContent = symbols[Math.floor(Math.random() * symbols.length)];
 
   el.style.left              = Math.random() * 100 + 'vw';
@@ -1031,7 +1207,7 @@ for (let i = 0; i < 22; i++) {
 function enterSite() {
   const intro = document.getElementById('intro');
   const site  = document.getElementById('main-site');
-  const bg    = document.getElementById('gradient-bg');
+  const bg    = document.getElementById('grad');
   const loadMsg = document.getElementById('loading-text');
 
   intro.style.opacity = '0';
@@ -1084,7 +1260,7 @@ function showSection(id) {
 
 let selectedQuest = '';
 
-function toggleQuest(el) {
+function ourdateoptions(el) {
   document.querySelectorAll('.quest-list li').forEach(li => li.classList.remove('selected'));
   el.classList.add('selected');
   const spans = el.querySelectorAll('span');
@@ -1196,7 +1372,7 @@ const bgTints = [
 ];
 
 function changeBgTint() {
-  document.getElementById('gradient-bg').style.background = bgTints[currentSong % bgTints.length];
+  document.getElementById('grad').style.background = bgTints[currentSong % bgTints.length];
 }
 
 
@@ -1469,6 +1645,16 @@ function answerQuiz(btn, type) {
       <div class="note-text">and btw, i carried you AND veah in fortnite. just saying...</div>
     </div>
 
+     <div class="note">
+      <div class="note-label">andd alsoo</div>
+      <div class="note-text">ayeee cant wait for the movies</div>
+    </div>
+
+      <div class="note">
+      <div class="note-label">fun fact</div>
+      <div class="note-text">aries has a tendency to smell bad... kinda like musty people in a swimming pool. very stink  btww, yuck</div>
+    </div>
+
   </div>
 </div>
 
@@ -1525,7 +1711,7 @@ function answerQuiz(btn, type) {
     border: none; color: #888;
     cursor: pointer; font-size: 0.75rem;
     padding: 0.2rem 0.7rem;
-    font-family: inherit;
+    font-family: 'Calibri', 'Candara';
     transition: opacity 0.15s;
   }
   #mailbox-close:hover { opacity: 0.7; }
@@ -1653,6 +1839,77 @@ window.addEventListener('load', () => {
     }
   });
 });
+  const erHints = {
+    1: [
+      'Look carefully at the first two images. Something old (another hint: roman numb) is hiding somewhere...',
+      'SOOOO, the third image is different. Think about the title rather than what you see'
+    ],
+    2: [
+      'Easy... keep only what matters last'
+    ],
+    3: [
+      "You're one number short. Our Movie date is tomorrow.. do the math or something idk smarty pants",
+      'Yes, make it the whole day...'
+    ]
+  };
+  const erHintState = { 1: 0, 2: 0, 3: 0 };
+
+  function erHint(stage) {
+    const box = document.getElementById('er-hint-' + stage);
+    const hints = erHints[stage];
+    const idx = erHintState[stage];
+    if (idx < hints.length) {
+      const p = document.createElement('p');
+      p.textContent = hints[idx];
+      p.style.animation = 'fadeIn 0.5s ease forwards';
+      box.appendChild(p);
+      erHintState[stage]++;
+    }
+  }
+
+  function erGoStage(n) {
+    document.querySelectorAll('.er-stage').forEach(s => s.classList.remove('active'));
+    document.getElementById('er-stage-' + n).classList.add('active');
+    for (let i = 1; i <= 3; i++) {
+      const dot = document.getElementById('er-dot-' + i);
+      dot.classList.remove('current', 'done');
+      if (i < n) dot.classList.add('done');
+      else if (i === n) dot.classList.add('current');
+    }
+  }
+
+  function erCheckCode() {
+    const input = document.getElementById('er-code-input');
+    const error = document.getElementById('er-error');
+    const success = document.getElementById('er-success');
+    if (input.value === '9738') {
+      error.classList.remove('visible');
+      success.classList.add('visible');
+      input.disabled = true;
+      document.getElementById('er-hint-btn-3').style.display = 'none';
+    } else {
+      error.classList.add('visible');
+      input.value = '';
+      input.focus();
+      setTimeout(() => error.classList.remove('visible'), 2500);
+    }
+  }
+
+  function openErLightbox(src) {
+    const lb = document.getElementById('er-lightbox');
+    document.getElementById('er-lb-img').src = src;
+    lb.classList.add('open');
+  }
+  function closeErLightbox() {
+    document.getElementById('er-lightbox').classList.remove('open');
+  }
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeErLightbox();
+  });
+  document.getElementById('er-code-input').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') erCheckCode();
+  });
+
 </script>
 
 </body>
