@@ -364,6 +364,96 @@
     color: #b8a0e0; border: 0.5px solid rgba(210,190,255,0.33);
   }
 
+  .dc-checkmark {
+    font-size: 1.1rem; margin-bottom: 0.4rem;
+  }
+
+  .dc-rating-section {
+    margin-top: 1rem; padding-top: 1rem;
+    border-top: 0.5px dashed #e8e4e0;
+  }
+  .dc-rating-label {
+    font-size: 0.78rem; color: #aaa;
+    margin-bottom: 0.5rem; letter-spacing: 0.04em;
+  }
+  .dc-stars {
+    display: flex; gap: 6px; margin-bottom: 0.6rem;
+  }
+  .dc-star {
+    font-size: 1.4rem; cursor: pointer;
+    transition: transform 0.2s ease, filter 0.2s ease;
+    filter: grayscale(1) opacity(0.35);
+    user-select: none;
+  }
+  .dc-star:hover { transform: scale(1.25); }
+  .dc-star.lit {
+    filter: grayscale(0) opacity(1);
+  }
+
+  .dc-notes-area {
+    width: 100%; min-height: 60px; max-height: 120px;
+    border: 0.5px solid #e8e4e0; border-radius: 10px;
+    padding: 0.65rem 0.85rem; font-size: 0.82rem;
+    font-family: 'Calibri', 'Candara', sans-serif;
+    color: #444; background: rgba(255,255,255,0.4);
+    resize: vertical; margin-top: 0.3rem;
+    transition: border-color 0.3s ease;
+    outline: none;
+  }
+  .dc-notes-area::placeholder { color: #ccc; }
+  .dc-notes-area:focus { border-color: #e8a8c8; }
+
+  .dc-screenshot-msg {
+    margin-top: 0.8rem; font-size: 0.75rem;
+    color: #d4a0b8; text-align: center;
+    letter-spacing: 0.03em; font-style: italic;
+  }
+
+  .dc-plan-card {
+    width: 100%; max-width: 400px;
+    border: 0.5px dashed #ddd8d4;
+    border-radius: 16px;
+    padding: 1.4rem 2rem;
+    background: rgba(255,255,255,0.3);
+    text-align: center;
+    transition: all 0.3s ease;
+    cursor: default;
+    margin-top: 1rem;
+  }
+  .dc-plan-card:hover {
+    border-color: #e8c8d8;
+    box-shadow: 0 4px 20px rgba(232,168,200,0.08);
+    background: rgba(255,255,255,0.5);
+  }
+  .dc-plan-emoji {
+    font-size: 1.6rem; margin-bottom: 0.4rem;
+  }
+  .dc-plan-text {
+    font-size: 0.88rem; color: #999;
+    letter-spacing: 0.03em; line-height: 1.5;
+  }
+  .dc-plan-text span {
+    color: #c9a0b8; font-style: italic; font-size: 0.78rem;
+  }
+
+  body.dark .date-card { background: rgba(30,30,35,0.6); border-color: #2a2a2f; }
+  body.dark .date-card:hover { box-shadow: 0 6px 24px rgba(140,120,180,0.15); }
+  body.dark .dc-activity { color: #eee; }
+  body.dark .dc-when { color: #888; }
+  body.dark .dc-day { color: #666; }
+  body.dark .dc-status.pending { background: rgba(180,140,255,0.12); color: #b8a0e0; border-color: rgba(180,140,255,0.3); }
+
+  body.dark .dc-rating-section { border-top-color: #2a2a2f; }
+  body.dark .dc-rating-label { color: #666; }
+  body.dark .dc-notes-area { background: rgba(40,40,48,0.5); border-color: #2a2a2f; color: #ccc; }
+  body.dark .dc-notes-area::placeholder { color: #555; }
+  body.dark .dc-notes-area:focus { border-color: #6a4a5a; }
+  body.dark .dc-screenshot-msg { color: #8a6a7a; }
+  body.dark .dc-plan-card { background: rgba(25,25,30,0.4); border-color: #333; }
+  body.dark .dc-plan-card:hover { border-color: #5a3a4a; box-shadow: 0 4px 20px rgba(140,100,160,0.1); }
+  body.dark .dc-plan-text { color: #666; }
+  body.dark .dc-plan-text span { color: #8a6a7a; }
+
   #idle-msg {
     position: fixed; bottom: 4.8rem; left: 50%;
     transform: translateX(-50%);
@@ -413,7 +503,6 @@
   }
   #exit-confirm-btn:hover { opacity: 0.75; }
 
-  /*da star*/
   #secret-star {
     position: fixed;
     top: 1.1rem; right: 1.4rem;
@@ -668,7 +757,6 @@
 .quiz-opts button:disabled { cursor: default; }
 .quiz-feedback { font-size: 0.82rem; color: #888; margin-top: 0.7rem; min-height: 1em; }
 
-/*dark mode shit*/
 body.dark { background: #0f0f12; color: #e8e8ea; }
 body.dark #grad { background: #0f0f12 !important; }
 body.dark #intro { background: #0f0f12; color: #e8e8ea; }
@@ -686,12 +774,6 @@ body.dark .quest-list li.selected .box { border-color: #888; background: #888; c
 body.dark .pics-grid .pic-slot { background: #1a1a1f; border-color: #2a2a2f; }
 body.dark .pics-note { color: #666; }
 body.dark #more-text { color: #666; }
-body.dark .date-card { background: rgba(30,30,35,0.6); border-color: #2a2a2f; }
-body.dark .date-card:hover { box-shadow: 0 6px 24px rgba(140,120,180,0.15); }
-body.dark .dc-activity { color: #eee; }
-body.dark .dc-when { color: #888; }
-body.dark .dc-day { color: #666; }
-body.dark .dc-status.pending { background: rgba(180,140,255,0.12); color: #b8a0e0; border-color: rgba(180,140,255,0.3); }
 body.dark .player-card { background: rgba(30,30,35,0.6); border-color: #2a2a2f; }
 body.dark .player-card .label { color: #777; }
 body.dark .player-card .song-name { color: #eee; }
@@ -830,7 +912,6 @@ body.dark section#future > p span { color: #666 !important; }
   }
   .er-nav-btn:hover { opacity: 0.75; }
   .er-nav-btn:disabled { opacity: 0.3; cursor: default; }
-  /* lightbox */
   #er-lightbox {
     position: fixed; inset: 0; z-index: 500;
     display: flex; align-items: center; justify-content: center;
@@ -849,7 +930,6 @@ body.dark section#future > p span { color: #666 !important; }
     transition: color 0.2s; user-select: none;
   }
   #er-lightbox .er-lb-close:hover { color: #333; }
-  /* dark mode escape room */
   body.dark .er-stage-label { color: #666; }
   body.dark .er-images .er-img-wrap { background: #1a1a1f; border-color: #2a2a2f; }
   body.dark .er-hint-box { color: #777; }
@@ -894,7 +974,7 @@ body.dark section#future > p span { color: #666 !important; }
   <h1>To Airibella, From Dee.</h1>
   <p>
    Sooo, As you're reading this... We just got done playing fort (Sooo... nevermind im so so sorry).. And as you can tell, I.. or WE i guess made something for ya in 4-5 days...<br>
-    <em> READ : (ANDDD i say that because my discord coding friend helped ALOTTTTT "maybe even TOOO much since he did the whole menu stuff... they pretty much helped me with everything all saturday / sunday night... since i dont really code in html / css before and im learning.. I did the photos section, and helped with the music player. and to be honest, for the music player part i asked ai a better understanding on different things to help me do the music player with my friend". But yeah, BIGGG thank you to my friend and say thank you to them for me.. Anyways)</em>
+    <em> READ : (ANDDD i say that because my discord coding friend helped ALOTTTTT "maybe even TOOO much since he did the whole menu stuff... they pretty much helped me with everything all saturday / sunday night... since i dont really code in html / css before and im learning.. I did the photos section, and helped with the music player. and to be honest, even for some parts of it, i asked ai a better understanding on different things to help me do the music player with my friend". But yeah, BIGGG thank you to my friend and say thank you to them for me.. Anyways)</em>
   </p>
   <button id="enter-btn" onclick="enterSite()">You can Click Enter Now.. HURRY UP</button>
 </div>
@@ -912,7 +992,7 @@ body.dark section#future > p span { color: #666 !important; }
     <a onclick="showSection('more')">more</a>
   </nav>
 
-  <div id="settings-btn" onclick="toggleSettings()" title="settings">⚙️</div> --- yes, i just added a emoji since i guess its okay to do that
+  <div id="settings-btn" onclick="toggleSettings()" title="settings">⚙️</div> --- yes, i just added a emoji since i guess its okay to do that (buttons dont work with more texts added sadly... dont mind that)
   <div id="settings-panel">
     <h4>settings</h4>
     <div class="setting-row">
@@ -924,7 +1004,7 @@ body.dark section#future > p span { color: #666 !important; }
   <div id="secret-star" onclick="triggerSecret()" title="psst... dont click me">⭐</div>
 
   <section id="dates">
-    <h2>Heyyy. Sooo, i have a tiny little question for ya. Would you maybe wanna go on a date with me sometime? Or even just hang out and spend some time togetherr? No pressure and no worries at all ofcc, I just thought it'd be really nice :)</h2>
+    <h2>HEYYY HELLOOOO! Welcome backk ariesss. I hope our movie date went well for ya and you had fun as well. I got another question, would you maybe wanna go on ANOTHER date with me sometime? Or even just hang out and spend some time togetherr? No pressure and no worries at all ofcc, I just thought it'd be really nice :)</h2>
     <div class="btn-row">
       <button class="choice-btn" onclick="handleAnswer('yes')" data-tip="amazing choice...">YES!</button>
       <button class="choice-btn" onclick="handleAnswer('maybe')" data-tip="okayy yessirr">Maybe</button>
@@ -1030,15 +1110,29 @@ body.dark section#future > p span { color: #666 !important; }
 
     <div class="date-card">
       <div class="dc-day">day 01</div>
+      <div class="dc-checkmark">✓</div>
       <div class="dc-activity">Movie Date 🎬</div>
       <div class="dc-when">July 1st &nbsp;-&nbsp; 5:55 PM</div>
-      <span class="dc-status confirmed">✓ &nbsp;confirmed</span>
+      <span class="dc-status confirmed">done &nbsp;&hearts;</span>
+      <div class="dc-rating-section">
+        <div class="dc-rating-label">soooohow'd it go?</div>
+        <div class="dc-stars" id="dc-stars">
+          <span class="dc-star" onclick="rateDate(1)">⭐</span>
+          <span class="dc-star" onclick="rateDate(2)">⭐</span>
+          <span class="dc-star" onclick="rateDate(3)">⭐</span>
+          <span class="dc-star" onclick="rateDate(4)">⭐</span>
+          <span class="dc-star" onclick="rateDate(5)">⭐</span>
+        </div>
+        <textarea class="dc-notes-area" id="dc-notes" placeholder="write a little note about how it went ariesss"></textarea>
+        <div class="dc-screenshot-msg">screenshot it and send it to me btww pleasee</div>
+      </div>
     </div>
+
 
     <div class="date-card locked">
       <div class="dc-day">day 02</div>
       <div class="dc-activity">???</div>
-      <div class="dc-when">coming soon... hopefully</div>
+      <div class="dc-when">plan itt... coming soon... hopefully</div>
       <span class="dc-status pending">🔒 &nbsp;stay tuned</span>
     </div>
   </section>
@@ -1909,6 +2003,18 @@ window.addEventListener('load', () => {
   document.getElementById('er-code-input').addEventListener('keydown', (e) => {
     if (e.key === 'Enter') erCheckCode();
   });
+
+  function rateDate(n) {
+    var stars = document.querySelectorAll('#dc-stars .dc-star');
+    for (var i = 0; i < stars.length; i++) {
+      if (i < n) {
+        stars[i].classList.add('lit');
+        stars[i].style.animationDelay = (i * 0.07) + 's';
+      } else {
+        stars[i].classList.remove('lit');
+      }
+    }
+  }
 
 </script>
 
